@@ -1,16 +1,17 @@
 import logger from "@/core/logger/logger";
+import { Environments } from "@/core/types/environments";
 import { StorageBucketApiData } from "@/core/types/storageBucketApiData";
 import { StorageObjectApiData } from "@/core/types/storageObjectApiData";
 import { DBStorageBucket } from "@/modules/mongodb/models/dbStorageBucket.model";
 import { DBStorageObject } from '@/modules/mongodb/models/dbStorageObject.model';
 import { MongoDB } from "@/modules/mongodb/mongodb";
 
-export const indexStorageBucketBulk = async (buckets: StorageBucketApiData[]) => {
+export const indexStorageBucketBulk = async (env: Environments, buckets: StorageBucketApiData[]) => {
     logger.logInfo('indexStorageBucketBulk', 'Begin');
 
     const database = new MongoDB();
     try {
-        await database.connectToDatabase();
+        await database.connectToDatabase(env);
 
         await Promise.all(buckets.map(async bucket => {
             const data = mapStorageBucket(bucket);
@@ -26,12 +27,12 @@ export const indexStorageBucketBulk = async (buckets: StorageBucketApiData[]) =>
     }
 }
 
-export const indexStorageObjectBulk = async (objects: StorageObjectApiData[]) => {
+export const indexStorageObjectBulk = async (env: Environments, objects: StorageObjectApiData[]) => {
     logger.logInfo('indexStorageObject', 'Begin');
 
     const database = new MongoDB();
     try {
-        await database.connectToDatabase();
+        await database.connectToDatabase(env);
 
         await Promise.all(objects.map(async object => {
             const data = mapStorageObject(object);
