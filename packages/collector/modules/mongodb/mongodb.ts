@@ -6,6 +6,7 @@ import { MongoDBStorageObjects } from './collections/storageObjects.collections'
 import { Config } from '@/core/config/config';
 import { MongoDBSyncStatus } from './collections/syncStatus.collections';
 import { DBSyncStatus } from './models/dbSyncStatus.model';
+import { Environments } from '@/core/types/environments';
 
 enum CollectionNames {
   StorageBuckets = 'buckets',
@@ -27,12 +28,12 @@ export class MongoDB {
 
   isConnected = () => this.connected;
 
-  async connectToDatabase() {
+  async connectToDatabase(env: Environments) {
     this.client = new mongoDB.MongoClient(Config.databaseConnection);
     await this.client.connect();
     this.connected = true;
 
-    const db = this.client.db(Config.databaseName);
+    const db = this.client.db(env === 'Mainnet' ? Config.databaseNameMainnet : Config.databaseNameTestnet);
 
     // // Apply schema validation to the collection
     // await applySchemaValidation(db);
@@ -47,9 +48,9 @@ export class MongoDB {
       db.collection<DBSyncStatus>(CollectionNames.SyncStatus),
     );
 
-    // this.collections.storageBuckets.ensureIndexes();
-    // this.collections.storageObjects.ensureIndexes();
-    // this.collections.syncStatus.ensureIndexes();
+    await this.collections.storageBuckets.ensureIndexes();
+    await this.collections.storageObjects.ensureIndexes();
+    await this.collections.syncStatus.ensureIndexes();
 
     console.log(`Opened connection to database: ${db.databaseName}.`);
   }

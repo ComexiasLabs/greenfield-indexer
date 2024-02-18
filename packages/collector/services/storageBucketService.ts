@@ -1,17 +1,31 @@
 import { Config } from "@/core/config/config";
-import { BUCKETS_DATA_FILEPATH, DEFAULT_FETCH_BUCKET_LIMIT, OBJECTS_DATA_FILEPATH } from "@/core/const/constant";
+import {
+  BUCKETS_DATA_FILEPATH,
+  DEFAULT_FETCH_BUCKET_LIMIT,
+  OBJECTS_DATA_FILEPATH,
+} from "@/core/const/constant";
 import logger from "@/core/logger/logger";
-import { FetchBucketsResponse, StorageBucketApiData } from "@/core/types/storageBucketApiData";
+import {
+  FetchBucketsResponse,
+  StorageBucketApiData,
+} from "@/core/types/storageBucketApiData";
 import { FetchObjectsResponse } from "@/core/types/storageObjectApiData";
 import axios from "axios";
 import { writeToJsonFile } from "./fileService";
+import { encodeForFilePath } from "@/core/utils/fileUtils";
+import { Environments } from "@/core/types/environments";
 
 export const fetchBuckets = async (
+  env: Environments,
   paginationKey?: string
 ): Promise<FetchBucketsResponse> => {
-    logger.logInfo('fetchBuckets', `Begin. paginationKey: ${paginationKey}`);
-    
-  const baseURL = `${Config.greenfieldBlockchainRPC}/greenfield/storage/list_buckets`;
+  logger.logInfo("fetchBuckets", `Begin. paginationKey: ${paginationKey}`);
+
+  const rpcURL =
+    env === "Mainnet"
+      ? Config.greenfieldBlockchainRPCMainnet
+      : Config.greenfieldBlockchainRPCTestnet;
+  const baseURL = `${rpcURL}/greenfield/storage/list_buckets`;
   const params = new URLSearchParams({
     "pagination.limit": `${DEFAULT_FETCH_BUCKET_LIMIT}`,
   });
@@ -26,12 +40,16 @@ export const fetchBuckets = async (
     });
 
     if (response.data && response.data.bucket_infos) {
-
       // Write to data file
-      if (Config.environment === 'local') {
-        writeToJsonFile(`${BUCKETS_DATA_FILEPATH}/data-limit-${DEFAULT_FETCH_BUCKET_LIMIT}-paginationkey-${(paginationKey)}.json`, response.data);
+      if (Config.environment === "local") {
+        writeToJsonFile(
+          `${BUCKETS_DATA_FILEPATH}/data-limit-${DEFAULT_FETCH_BUCKET_LIMIT}-paginationkey-${encodeForFilePath(
+            paginationKey
+          )}.json`,
+          response.data
+        );
       }
-      
+
       return response.data;
     } else {
       throw new Error("Unexpected response structure");
@@ -43,20 +61,29 @@ export const fetchBuckets = async (
 };
 
 export const fetchObjectsInBucket = async (
+  env: Environments,
   bucketName: string
 ): Promise<FetchObjectsResponse> => {
-    logger.logInfo('fetchBuckets', `Begin. bucketName: ${bucketName}`);
-    
-  const baseURL = `${Config.greenfieldBlockchainRPC}/greenfield/storage/list_objects/${bucketName}`;
+  logger.logInfo("fetchBuckets", `Begin. bucketName: ${bucketName}`);
+
+  const rpcURL =
+    env === "Mainnet"
+      ? Config.greenfieldBlockchainRPCMainnet
+      : Config.greenfieldBlockchainRPCTestnet;
+  const baseURL = `${rpcURL}/greenfield/storage/list_objects/${bucketName}`;
 
   try {
     const response = await axios.get<FetchObjectsResponse>(baseURL);
 
     if (response.data && response.data.object_infos) {
-
       // Write to data file
-      if (Config.environment === 'local') {
-        writeToJsonFile(`${OBJECTS_DATA_FILEPATH}/data-bucketname-${bucketName}.json`, response.data);
+      if (Config.environment === "local") {
+        writeToJsonFile(
+          `${OBJECTS_DATA_FILEPATH}/data-bucketname-${encodeForFilePath(
+            bucketName
+          )}.json`,
+          response.data
+        );
       }
 
       return response.data;

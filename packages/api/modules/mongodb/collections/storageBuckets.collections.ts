@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb';
 import DBStorageBucket from '../models/dbStorageBucket.model';
 import { Tag } from '@core/types/api';
 import { DBPaginatedResult } from '../types/pagination';
+import logger from '@core/logger/logger';
 
 export class MongoDBStorageBuckets {
   private collection?: mongoDB.Collection<DBStorageBucket>;
@@ -28,12 +29,16 @@ export class MongoDBStorageBuckets {
   }
 
   async getStorageBucketByTags(tags: Tag[], limit: number, offset: number): Promise<DBPaginatedResult<DBStorageBucket> | null | undefined> {
+    logger.logInfo('getStorageBucketByTags', `tags: ${JSON.stringify(tags)}`);
+
     const query = {
       tags: {
         $all: tags.map(tag => ({ $elemMatch: { key: tag.key, value: tag.value } }))
       }
     };
-    
+
+    logger.logInfo('getStorageBucketByTags', `query: ${JSON.stringify(query)}`);
+    console.log();
     const totalCount = await this.collection.countDocuments(query);
 
     const result = await this.collection?.find(query).skip(offset).limit(limit).toArray();
