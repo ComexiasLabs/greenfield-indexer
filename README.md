@@ -18,43 +18,51 @@ This challenge is proposed to incorporate a robust tagging indexing system, allo
 ## Indexed Data
 
 In addition to buckets and objects tags, we also index the following fields as part of the tags:
+
 - owner
 - visibility
 - source_type
 - content_type (objects only)
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v14 or later recommended)
-- MongoDB for storing the indexed data
-
-### Setup Collector
-
-Refer to documentation at `/packages/collector/README.md`
-
-### Setup API
-
-Refer to documentation at `/packages/api/README.md`
-
 ## GraphQL and RESTful API Reference
 
 The Greenfield Indexer API offers several queries and endpoints for interacting with the indexed metadata.
 
-For a full list of available endpoints and detailed usage instructions, please refer to the API documentation at `/docs/api-documentation.md`
+For a full list of available endpoints and detailed usage instructions, please refer to the API documentation at [/docs/api-documentation.md](/blob/main/docs/api-documentation.md)
 
 ## Technical Design
 
 ### Tech Stack
 
-- NextJS, NodeJS, Express, GraphQL, TypeScript, MongoDB (Atlas), Vercel
+- NextJS, NodeJS, Express, GraphQL, TypeScript, MongoDB, Vercel, Redis
 
 ### Architecture Diagram
 
-We are progressively developing the service in phases to eventually be like the following architecture.
+<p align="center">
+    <img width="600px" src="docs/diagrams/greenfield-indexer-architecture.png" alt="">
+</p>
 
-Current MVP stage: (TBC)
+**Experience Layer**
+
+- **GraphQL API**: GraphQL API for consumers to perform search queries on buckets and objects.
+- **RESTful API**: REST API for consumers to perform search queries on buckets and objects.
+
+**Collection Layer**
+
+- **Job Queue**: Stores the collection trigger events in which the injester will act on. (Phase 2)
+- **Injester**: Retrieves bucket and objects metadata from Greenfield blockchain using the RPC URL.
+- **Indexer**: Process the raw data retrieved from Greenfield blockchain and index them in the offchain database.
+- **Scheduler**: Cron job responsible for starting the collection process, and restarting the process should there be a failed collection attempt.
+
+**Data Layer**
+
+- Cache: Read through cache for reducing load to the datababase and serving query for efficiently. (Phase 2)
+- Database: MongoDB database storing the index of the buckets and objects metadata.
+
+**Greenfield Blockchain**
+
+- Storage API: The ListBuckets and ListObjects endpoints in Greenfield blockchain are used to fetch metadata for new buckets and objects.
+- Base API: The GetBlockByHeight endpoint is used to detect updates to existing buckets and objects through transactions. (Phase 2)
 
 ### Technical Considerations
 
@@ -69,6 +77,21 @@ The Greenfield Indexer is designed with modern architectural principles to ensur
 - **Asynchronous Operations**: Designed for asynchronous execution, the collection service allows for a "fire and forget" model of operation. Once initiated, it proceeds with the data ingestion and indexing processes independently, allowing calling processes to continue without waiting for completion.
 
 These considerations underscore our commitment to leveraging contemporary cloud-native technologies and practices to deliver a robust, efficient, and user-friendly service.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or later recommended)
+- MongoDB for storing the indexed data
+
+### Setup Collector
+
+Refer to documentation at [/packages/collector/README.md](/blob/main/packages/collector/README.md)
+
+### Setup API
+
+Refer to documentation at [/packages/api/README.md](/blob/main/packages/api/README.md)
 
 ## Contributing
 
