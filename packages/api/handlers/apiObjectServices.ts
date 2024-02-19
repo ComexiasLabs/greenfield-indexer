@@ -15,7 +15,7 @@ export const apiFetchObjectsByTags = async (
   try {
     logger.logInfo(
       "apiFetchObjectsByTags",
-      `Begin. tags: ${tags}, limit: ${limit}, offset: ${offset}`
+      `Begin. tags: ${JSON.stringify(tags)}, limit: ${limit}, offset: ${offset}`
     );
 
     const tagFormat = determineTagFormat(tags);

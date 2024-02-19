@@ -1,0 +1,166 @@
+{
+    "bucket_infos": [
+        {
+            "owner": "0xDF05E8668b4dd046F4C41A6F3c81DCB7E72FA921",
+            "bucket_name": "2mzt3",
+            "visibility": "VISIBILITY_TYPE_PRIVATE",
+            "id": "3621",
+            "source_type": "SOURCE_TYPE_BSC_CROSS_CHAIN",
+            "create_at": "1705393722",
+            "payment_address": "0xDF05E8668b4dd046F4C41A6F3c81DCB7E72FA921",
+            "global_virtual_group_family_id": 10,
+            "charged_read_quota": "0",
+            "bucket_status": "BUCKET_STATUS_CREATED",
+            "tags": null
+        },
+        {
+            "owner": "0xc466e71981ffdb77DF558C013A166814841fe70A",
+            "bucket_name": "3039hxred6",
+            "visibility": "VISIBILITY_TYPE_PRIVATE",
+            "id": "3624",
+            "source_type": "SOURCE_TYPE_BSC_CROSS_CHAIN",
+            "create_at": "1705393816",
+            "payment_address": "0xc466e71981ffdb77DF558C013A166814841fe70A",
+            "global_virtual_group_family_id": 3,
+            "charged_read_quota": "0",
+            "bucket_status": "BUCKET_STATUS_CREATED",
+            "tags": {
+                "tags": [
+                    {
+                        "key": "name",
+                        "value": "yuki"
+                    }
+                ]
+            }
+        },
+        {
+            "owner": "0xa90dE3D4403bA1B2526be889df3656AFe556C1bE",
+            "bucket_name": "3i0xwxsjuf",
+            "visibility": "VISIBILITY_TYPE_PRIVATE",
+            "id": "3625",
+            "source_type": "SOURCE_TYPE_ORIGIN",
+            "create_at": "1705393827",
+            "payment_address": "0xa90dE3D4403bA1B2526be889df3656AFe556C1bE",
+            "global_virtual_group_family_id": 5,
+            "charged_read_quota": "0",
+            "bucket_status": "BUCKET_STATUS_CREATED",
+            "tags": {
+                "tags": [
+                    {
+                        "key": "name",
+                        "value": "yuki"
+                    }
+                ]
+            }
+        },
+        {
+            "owner": "0x8c739956aC321766A6Cd1254Fc6A7a25A1943e80",
+            "bucket_name": "p2ro09ycyv",
+            "visibility": "VISIBILITY_TYPE_PRIVATE",
+            "id": "3636",
+            "source_type": "SOURCE_TYPE_ORIGIN",
+            "create_at": "1705394038",
+            "payment_address": "0x8c739956aC321766A6Cd1254Fc6A7a25A1943e80",
+            "global_virtual_group_family_id": 3,
+            "charged_read_quota": "0",
+            "bucket_status": "BUCKET_STATUS_CREATED",
+            "tags": {
+                "tags": [
+                    {
+                        "key": "name",
+                        "value": "yuki"
+                    }
+                ]
+            }
+        },
+        {
+            "owner": "0x8c739956aC321766A6Cd1254Fc6A7a25A1943e80",
+            "bucket_name": "qd2i2qiebm",
+            "visibility": "VISIBILITY_TYPE_PRIVATE",
+            "id": "3640",
+            "source_type": "SOURCE_TYPE_ORIGIN",
+            "create_at": "1705394074",
+            "payment_address": "0x8c739956aC321766A6Cd1254Fc6A7a25A1943e80",
+            "global_virtual_group_family_id": 11,
+            "charged_read_quota": "0",
+            "bucket_status": "BUCKET_STATUS_CREATED",
+            "tags": {
+                "tags": [
+                    {
+                        "key": "name",
+                        "value": "yuki"
+                    }
+                ]
+            }
+        },
+        {
+            "owner": "0x1f6b10F8e900fa81D9B9ae48a870Ebf371f141e8",
+            "bucket_name": "sign",
+            "visibility": "VISIBILITY_TYPE_PUBLIC_READ",
+            "id": "3654",
+            "source_type": "SOURCE_TYPE_ORIGIN",
+            "create_at": "1705488270",
+            "payment_address": "0x1f6b10F8e900fa81D9B9ae48a870Ebf371f141e8",
+            "global_virtual_group_family_id": 2,
+            "charged_read_quota": "32212254720",
+            "bucket_status": "BUCKET_STATUS_CREATED",
+            "tags": null
+        },
+        {
+            "owner": "0x4e10ab3e9c6789D64d814e5eA471130c49B82b3d",
+            "bucket_name": "zzhls",
+            "visibility": "VISIBILITY_TYPE_PRIVATE",
+            "id": "3667",
+            "source_type": "SOURCE_TYPE_ORIGIN",
+            "create_at": "1705548023",
+            "payment_address": "0x4e10ab3e9c6789D64d814e5eA471130c49B82b3d",
+            "global_virtual_group_family_id": 24,
+            "charged_read_quota": "0",
+            "bucket_status": "BUCKET_STATUS_CREATED",
+            "tags": null
+        },
+        {
+            "owner": "0x8c739956aC321766A6Cd1254Fc6A7a25A1943e80",
+            "bucket_name": "1ffh1",
+            "visibility": "VISIBILITY_TYPE_PRIVATE",
+            "id": "3681",
+            "source_type": "SOURCE_TYPE_ORIGIN",
+            "create_at": "1705548636",
+            "payment_address": "0x8c739956aC321766A6Cd1254Fc6A7a25A1943e80",
+            "global_virtual_group_family_id": 20,
+            "charged_read_quota": "0",
+            "bucket_status": "BUCKET_STATUS_CREATED",
+            "tags": null
+        },
+        {
+            "owner": "0x1280773EAb9a3F883c5F29AE406A03369bb5932a",
+            "bucket_name": "5z6ih",
+            "visibility": "VISIBILITY_TYPE_PRIVATE",
+            "id": "3682",
+            "source_type": "SOURCE_TYPE_ORIGIN",
+            "create_at": "1705548639",
+            "payment_address": "0x1280773EAb9a3F883c5F29AE406A03369bb5932a",
+            "global_virtual_group_family_id": 25,
+            "charged_read_quota": "0",
+            "bucket_status": "BUCKET_STATUS_CREATED",
+            "tags": null
+        },
+        {
+            "owner": "0x4e10ab3e9c6789D64d814e5eA471130c49B82b3d",
+            "bucket_name": "1gvw3",
+            "visibility": "VISIBILITY_TYPE_PRIVATE",
+            "id": "3683",
+            "source_type": "SOURCE_TYPE_ORIGIN",
+            "create_at": "1705551437",
+            "payment_address": "0x4e10ab3e9c6789D64d814e5eA471130c49B82b3d",
+            "global_virtual_group_family_id": 24,
+            "charged_read_quota": "0",
+            "bucket_status": "BUCKET_STATUS_CREATED",
+            "tags": null
+        }
+    ],
+    "pagination": {
+        "next_key": "DnE=",
+        "total": "0"
+    }
+}

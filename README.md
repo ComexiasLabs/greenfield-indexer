@@ -15,14 +15,19 @@ This challenge is proposed to incorporate a robust tagging indexing system, allo
 - **Pagination Support**: Efficiently browse through large datasets with built-in pagination support.
 - **Open Source**: Fully open-source, enabling contributions and customizations from the developer community.
 
+## Environment Support
+
+- BNB Greenfield Mainnet
+- BNB Greenfield Testnet
+
 ## Indexed Data
 
 In addition to buckets and objects tags, we also index the following fields as part of the tags:
 
-- owner
-- visibility
-- source_type
-- content_type (objects only)
+- _owner
+- _visibility
+- _source_type
+- _content_type (objects only)
 
 ## GraphQL and RESTful API Reference
 

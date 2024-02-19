@@ -44,7 +44,7 @@ export default async function handler(
         .json({ message: "The tags JSON format is incorrectly formed." });
     }
   
-    const result = await apiFetchBucketsByTags(tagsObject, limit, offset);
+    const result = await apiFetchBucketsByTags(tagsObject, Number(limit), Number(offset));
     
     const data: ResponseData = {
       data: result.data,

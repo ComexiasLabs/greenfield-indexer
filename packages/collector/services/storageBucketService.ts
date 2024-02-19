@@ -43,7 +43,7 @@ export const fetchBuckets = async (
       // Write to data file
       if (Config.environment === "local") {
         writeToJsonFile(
-          `${BUCKETS_DATA_FILEPATH}/data-limit-${DEFAULT_FETCH_BUCKET_LIMIT}-paginationkey-${encodeForFilePath(
+          `${BUCKETS_DATA_FILEPATH.replace('{env}', env)}/data-limit-${DEFAULT_FETCH_BUCKET_LIMIT}-paginationkey-${encodeForFilePath(
             paginationKey
           )}.json`,
           response.data
@@ -79,7 +79,7 @@ export const fetchObjectsInBucket = async (
       // Write to data file
       if (Config.environment === "local") {
         writeToJsonFile(
-          `${OBJECTS_DATA_FILEPATH}/data-bucketname-${encodeForFilePath(
+          `${OBJECTS_DATA_FILEPATH.replace('{env}', env)}/data-bucketname-${encodeForFilePath(
             bucketName
           )}.json`,
           response.data

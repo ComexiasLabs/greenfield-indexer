@@ -65,7 +65,7 @@ export const mapStorageBucket = (rawBucket: StorageBucketApiData): DBStorageBuck
         sourceType: rawBucket.source_type,
         bucketStatus: rawBucket.bucket_status,
         createdAtBlock: parseInt(rawBucket.create_at),
-        tags: [...(rawBucket.tags ? rawBucket.tags.map(tag => ({ key: tag.key, value: tag.value })) : []), ...additionalTags],
+        tags: [...additionalTags, ...(rawBucket.tags ? rawBucket.tags.tags!.map(tag => ({ key: tag.key, value: tag.value })) : [])],
         indexDate: Date.now(),
     };
 
@@ -92,7 +92,7 @@ export const mapStorageObject = (rawObject: StorageObjectApiData): DBStorageObje
         sourceType: rawObject.source_type,
         objectStatus: rawObject.object_status,
         createdAtBlock: parseInt(rawObject.create_at),
-        tags: [...(rawObject.tags ? rawObject.tags.map(tag => ({ key: tag.key, value: tag.value })) : []), ...additionalTags],
+        tags: [...additionalTags, ...(rawObject.tags ? rawObject.tags.tags!.map(tag => ({ key: tag.key, value: tag.value })) : [])],
         indexDate: Date.now(),
     };
 
