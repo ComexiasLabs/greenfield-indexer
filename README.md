@@ -4,7 +4,7 @@ BNB Greenfield Indexer is an open-source indexing service and API designed to ef
 It provides real-time indexing to an off-chain database, allowing easy access and searchability of metadata for storage buckets and objects through a REST and GraphQL API.
 
 This project is a respond to the following community wishlist:
-https://github.com/bnb-chain/community-contributions/blob/main/bnb-greenfield-wishlist-corechain.md#challenge-greenfield-tagging-and-indexing-service
+https://github.com/bnb-chain/community-contributions/bnb-greenfield-wishlist-corechain.md#challenge-greenfield-tagging-and-indexing-service
 
 This challenge is proposed to incorporate a robust tagging indexing system, allowing for efficient data search by tags.
 
@@ -33,7 +33,7 @@ In addition to buckets and objects tags, we also index the following fields as p
 
 The Greenfield Indexer API offers several queries and endpoints for interacting with the indexed metadata.
 
-For a full list of available endpoints and detailed usage instructions, please refer to the API documentation at [/docs/api-documentation.md](/blob/main/docs/api-documentation.md)
+For a full list of available endpoints and detailed usage instructions, please refer to the API documentation at [/docs/api-documentation.md](/docs/api-documentation.md)
 
 ## Technical Design
 
@@ -92,11 +92,11 @@ These considerations underscore our commitment to leveraging contemporary cloud-
 
 ### Setup Collector
 
-Refer to documentation at [/packages/collector/README.md](/blob/main/packages/collector/README.md)
+Refer to documentation at [/packages/collector/README.md](/packages/collector/README.md)
 
 ### Setup API
 
-Refer to documentation at [/packages/api/README.md](/blob/main/packages/api/README.md)
+Refer to documentation at [/packages/api/README.md](/packages/api/README.md)
 
 ## Contributing
 
