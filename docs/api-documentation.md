@@ -8,8 +8,14 @@ The GraphQL API offers a flexible way to query the BNB Greenfield buckets and ob
 
 The GraphQL API is accessible at:
 
+**Mainnet**
 ```bash
 https://greenfield-indexer-api.vercel.app/api/graphql
+```
+
+**Testnet**
+```bash
+https://greenfield-indexer-api-testnet.vercel.app/api/graphql
 ```
 
 All queries and mutations must be sent as POST requests to this endpoint.
@@ -94,8 +100,14 @@ The RESTful API allows for straightforward access to Greenfield data, supporting
 
 The RESTful API is accessible at:
 
+**Mainnet**
 ```bash
 https://greenfield-indexer-api.vercel.app/api
+```
+
+**Testnet**
+```bash
+https://greenfield-indexer-api-testnet.vercel.app/api
 ```
 
 ### Find Buckets by Tags

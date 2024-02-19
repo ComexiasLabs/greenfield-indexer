@@ -14,9 +14,11 @@ export interface StorageObjectApiData {
   source_type: string;
   checksums: string[];
   tags?: {
-    key: string;
-    value: string;
-  }[] | null;
+    tags: {
+      key: string;
+      value: string;
+    }[] | null;
+  }
 }
 
 export interface FetchObjectsResponse {
