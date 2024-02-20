@@ -2,8 +2,10 @@ import { gql } from 'apollo-server-micro';
 
 export const typeDefs = gql`
   type Query {
-    findBucketsByTags(tags: [TagInput!]!, limit: Int, offset: Int): BucketResult
-    findObjectsByTags(tags: [TagInput!]!, limit: Int, offset: Int): ObjectResult
+    findBucketsByTags(tags: [TagInput!]!, limit: Int, offset: Int): BucketsResult
+    findObjectsByTags(tags: [TagInput!]!, limit: Int, offset: Int): ObjectsResult
+    findBucketById(id: Int!): StorageBucket
+    findObjectById(id: Int!): StorageObject
   }
 
   input TagInput {
@@ -36,12 +38,12 @@ export const typeDefs = gql`
     totalCount: Int
   }
 
-  type BucketResult {
+  type BucketsResult {
     data: [StorageBucket]
     pagination: PaginationInfo
   }
 
-  type ObjectResult {
+  type ObjectsResult {
     data: [StorageObject]
     pagination: PaginationInfo
   }

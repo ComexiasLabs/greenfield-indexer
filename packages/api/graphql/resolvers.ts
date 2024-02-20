@@ -1,6 +1,6 @@
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from "@core/const/constant";
-import { apiFetchBucketsByTags } from "@handlers/apiBucketServices";
-import { apiFetchObjectsByTags } from "@handlers/apiObjectServices";
+import { apiFetchBucketById, apiFetchBucketsByTags } from "@handlers/apiBucketServices";
+import { apiFetchObjectById, apiFetchObjectsByTags } from "@handlers/apiObjectServices";
 
 const resolvers = {
   Query: {
@@ -25,6 +25,12 @@ const resolvers = {
           totalCount: result.totalCount,
         },
       };
+    },
+    findBucketById: async (_, { id }) => {
+      return await apiFetchBucketById(id);
+    },
+    findObjectById: async (_, { id }) => {
+      return await apiFetchObjectById(id);
     },
   },
 };
