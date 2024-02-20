@@ -10,7 +10,7 @@ export const apiFetchObjectsByTags = async (
   tags: Tag[],
   limit: number,
   offset: number
-): Promise<{ data: StorageObject[], totalCount: number }> => {
+): Promise<{ data: StorageObject[]; totalCount: number }> => {
   const database = new MongoDB();
   try {
     logger.logInfo(
@@ -31,18 +31,20 @@ export const apiFetchObjectsByTags = async (
       );
     }
     if (tagFormat === "Key") {
-      data = await database.collections.storageObjects?.getStorageObjectByTagKeys(
-        tags.map(item => item.key),
-        limit,
-        offset
-      );
+      data =
+        await database.collections.storageObjects?.getStorageObjectByTagKeys(
+          tags.map((item) => item.key),
+          limit,
+          offset
+        );
     }
     if (tagFormat === "Value") {
-      data = await database.collections.storageObjects?.getStorageObjectByTagValues(
-        tags.map(item => item.value),
-        limit,
-        offset
-      );
+      data =
+        await database.collections.storageObjects?.getStorageObjectByTagValues(
+          tags.map((item) => item.value),
+          limit,
+          offset
+        );
     }
 
     const result: StorageObject[] = [];
@@ -56,6 +58,30 @@ export const apiFetchObjectsByTags = async (
     };
   } catch (e) {
     logger.logError("apiFetchObjectsByTags", "Failed", e);
+    return null;
+  } finally {
+    await database.disconnectFromDatabase();
+  }
+};
+
+export const apiFetchObjectById = async (
+  id: number
+): Promise<StorageObject | undefined | null> => {
+  const database = new MongoDB();
+  try {
+    logger.logInfo("apiFetchObjectById", `Begin. id: ${id}`);
+
+    await database.connectToDatabase();
+
+    const data =
+      await database.collections.storageObjects?.getStorageObjectById(id);
+    if (!data) {
+      return null;
+    }
+
+    return adaptStorageObject(data);
+  } catch (e) {
+    logger.logError("apiFetchObjectById", "Failed", e);
     return null;
   } finally {
     await database.disconnectFromDatabase();

@@ -2,6 +2,10 @@
 
 Greenfield Indexer API is a facilitates the searching of buckets and objects on BNB Chain's Greenfield. It provides two distinct APIs: a RESTful API for HTTP request-based interactions and a GraphQL API for flexible queries.
 
+## Postman Collection
+
+The Postman collection for all GraphQL and REST API queries are available to download at [greenfield-indexer-api.postman_collection.json](/postman/greenfield-indexer-api.postman_collection.json)
+
 ## GraphQL API
 
 The GraphQL API offers a flexible way to query the BNB Greenfield buckets and objects metadata using GraphQL queries.
@@ -87,6 +91,58 @@ curl -X POST -H "Content-Type: application/json" \
 greenfield-indexer-api.vercel.app/api/graphql
 ```
 
+### findBucketById
+
+Fetches a bucket by its Id.
+
+```graphql
+query findBucketById($id: Int!) {
+  findBucketById(id: $id) {
+    id
+    name
+    tags {
+      key
+      value
+    }
+  }
+}
+```
+
+Example:
+
+```bash
+curl -X POST -H "Content-Type: application/json" \
+--data '{ "query": "{ findBucketById(id: 7237) { id name tags { key value } } }" }' \
+greenfield-indexer-api.vercel.app/api/graphql
+
+```
+
+### findObjectById
+
+Fetches an object by its Id.
+
+```graphql
+query findObjectById($id: Int!) {
+  findObjectById(id: $id) {
+    id
+    name
+    tags {
+      key
+      value
+    }
+  }
+}
+```
+
+Example:
+
+```bash
+curl -X POST -H "Content-Type: application/json" \
+--data '{ "query": "{ findObjectById(id: 5355) { id name tags { key value } } }" }' \
+greenfield-indexer-api.vercel.app/api/graphql
+
+```
+
 ### Types
 
 - **TagInput**: Input type for specifying tags as key-value pairs.
@@ -108,6 +164,32 @@ https://greenfield-indexer-api.vercel.app/api
 **Testnet**
 ```bash
 https://greenfield-indexer-api-testnet.vercel.app/api
+```
+
+### Find Bucket by Id
+
+Fetches a bucket by its Id.
+
+- Method: GET
+- URL: <http://greenfield-indexer-api.vercel.app/api/find/buckets/{id}>
+
+Example Request:
+
+```bash
+curl "http://greenfield-indexer-api.vercel.app/api/find/buckets/7237"
+```
+
+### Find Object by Id
+
+Fetches a object by its Id.
+
+- Method: GET
+- URL: <http://greenfield-indexer-api.vercel.app/api/find/objects/{id}>
+
+Example Request:
+
+```bash
+curl "http://greenfield-indexer-api.vercel.app/api/find/objects/5355"
 ```
 
 ### Find Buckets by Tags
