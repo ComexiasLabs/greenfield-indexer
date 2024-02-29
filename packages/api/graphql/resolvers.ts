@@ -1,5 +1,5 @@
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from "@core/const/constant";
-import { apiFetchBucketById, apiFetchBucketsByTags } from "@handlers/apiBucketServices";
+import { apiFetchBucketById, apiFetchBucketByName, apiFetchBucketsByTags } from "@handlers/apiBucketServices";
 import { apiFetchObjectById, apiFetchObjectsByTags } from "@handlers/apiObjectServices";
 
 const resolvers = {
@@ -28,6 +28,9 @@ const resolvers = {
     },
     findBucketById: async (_, { id }) => {
       return await apiFetchBucketById(id);
+    },
+    findBucketByName: async (_, { name }) => {
+      return await apiFetchBucketByName(name);
     },
     findObjectById: async (_, { id }) => {
       return await apiFetchObjectById(id);

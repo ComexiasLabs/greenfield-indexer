@@ -87,3 +87,27 @@ export const apiFetchBucketById = async (
     await database.disconnectFromDatabase();
   }
 };
+
+export const apiFetchBucketByName = async (
+  name: string
+): Promise<StorageBucket | undefined | null> => {
+  const database = new MongoDB();
+  try {
+    logger.logInfo("apiFetchBucketByName", `Begin. name: ${name}`);
+
+    await database.connectToDatabase();
+
+    const data =
+      await database.collections.storageBuckets?.getStorageBucketByName(name);
+    if (!data) {
+      return null;
+    }
+
+    return adaptStorageBucket(data);
+  } catch (e) {
+    logger.logError("apiFetchBucketByName", "Failed", e);
+    return null;
+  } finally {
+    await database.disconnectFromDatabase();
+  }
+};

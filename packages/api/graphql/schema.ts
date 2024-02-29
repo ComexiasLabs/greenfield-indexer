@@ -6,6 +6,7 @@ export const typeDefs = gql`
     findObjectsByTags(tags: [TagInput!]!, limit: Int, offset: Int): ObjectsResult
     findBucketById(id: Int!): StorageBucket
     findObjectById(id: Int!): StorageObject
+    findBucketByName(name: String!): StorageBucket
   }
 
   input TagInput {
