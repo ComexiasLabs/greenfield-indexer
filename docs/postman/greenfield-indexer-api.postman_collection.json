@@ -57,6 +57,31 @@
 			"response": []
 		},
 		{
+			"name": "GraphQL (Bucket Name)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\n  findBucketByName(name: \"public\") {\n    id\n    name\n    tags {\n      key\n      value\n    }\n  }\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{GREENFIELD_INDEXER_API}}/api/graphql",
+					"host": [
+						"{{GREENFIELD_INDEXER_API}}"
+					],
+					"path": [
+						"api",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "GraphQL (Objects)",
 			"request": {
 				"method": "POST",
@@ -166,6 +191,33 @@
 						"find",
 						"buckets",
 						"7237"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Bucket By Name",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Gnfd-User-Address",
+						"value": "0x3DA7E2F900985b8880A9ACB3ca916F6031E6FF22",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{GREENFIELD_INDEXER_API}}/api/find/buckets/name/public",
+					"host": [
+						"{{GREENFIELD_INDEXER_API}}"
+					],
+					"path": [
+						"api",
+						"find",
+						"buckets",
+						"name",
+						"public"
 					]
 				}
 			},

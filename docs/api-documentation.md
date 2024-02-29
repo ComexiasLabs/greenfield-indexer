@@ -117,6 +117,32 @@ greenfield-indexer-api.vercel.app/api/graphql
 
 ```
 
+### findBucketByName
+
+Fetches a bucket by its name.
+
+```graphql
+query findBucketByName($name: String!) {
+  findBucketByName(name: $name) {
+    id
+    name
+    tags {
+      key
+      value
+    }
+  }
+}
+```
+
+Example:
+
+```bash
+curl -X POST -H "Content-Type: application/json" \
+--data '{ "query": "{ findBucketByName(id: "public") { id name tags { key value } } }" }' \
+greenfield-indexer-api.vercel.app/api/graphql
+
+```
+
 ### findObjectById
 
 Fetches an object by its Id.
@@ -177,6 +203,19 @@ Example Request:
 
 ```bash
 curl "http://greenfield-indexer-api.vercel.app/api/find/buckets/7237"
+```
+
+### Find Bucket by Name
+
+Fetches a bucket by its name.
+
+- Method: GET
+- URL: <http://greenfield-indexer-api.vercel.app/api/find/buckets/name/{bucketName}>
+
+Example Request:
+
+```bash
+curl "http://greenfield-indexer-api.vercel.app/api/find/buckets/name/public"
 ```
 
 ### Find Object by Id
