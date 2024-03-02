@@ -37,4 +37,18 @@ export class MongoDBStorageObjects {
     // @ts-ignore
     await this.collection?.updateOne(query, { $set: data }, { upsert: true });
   }
+
+  async updateStorageObjectTags(
+    bucketName: string,
+    objectName: string,
+    tags: {
+      key: string;
+      value: string;
+    }[],
+  ) {
+    const query = { bucketName: bucketName, objectName: objectName };
+    const update = { $set: { tags: tags } };
+
+    await this.collection?.updateOne(query, update);
+  }
 }

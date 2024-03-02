@@ -10,14 +10,14 @@ export class MongoDBSyncStatus {
 
   async ensureIndexes() {}
 
-  async getSyncStatus(storageType: string): Promise<DBSyncStatus | null | undefined> {
-    const query = { storageType: storageType };
+  async getSyncStatus(channel: string): Promise<DBSyncStatus | null | undefined> {
+    const query = { channel: channel };
     const result = await this.collection?.findOne(query);
     return result;
   }
 
   async upsertSyncStatus(data: DBSyncStatus) {
-    const query = { storageType: data.storageType };
+    const query = { channel: data.channel };
     // @ts-ignore
     await this.collection?.updateOne(query, { $set: data }, { upsert: true });
   }

@@ -2,6 +2,7 @@ import logger from '@/core/logger/logger';
 import { Environments } from '@/core/types/environments';
 import { StorageBucketApiData } from '@/core/types/storageBucketApiData';
 import { StorageObjectApiData } from '@/core/types/storageObjectApiData';
+import { Tag } from '@/core/types/tag';
 import { DBStorageBucket } from '@/modules/mongodb/models/dbStorageBucket.model';
 import { DBStorageObject } from '@/modules/mongodb/models/dbStorageObject.model';
 import { MongoDB } from '@/modules/mongodb/mongodb';
@@ -28,7 +29,7 @@ export const indexStorageBucketBulk = async (env: Environments, buckets: Storage
 };
 
 export const indexStorageObjectBulk = async (env: Environments, objects: StorageObjectApiData[]) => {
-  logger.logInfo('indexStorageObject', 'Begin');
+  logger.logInfo('indexStorageObjectBulk', 'Begin');
 
   const database = new MongoDB();
   try {
@@ -103,4 +104,24 @@ export const mapStorageObject = (rawObject: StorageObjectApiData): DBStorageObje
   };
 
   return result;
+};
+
+export const indexStorageTags = async (env: Environments, bucketName: string, objectName: string, tags: Tag[]) => {
+  logger.logInfo('indexStorageTags', 'Begin');
+
+  const database = new MongoDB();
+  try {
+    await database.connectToDatabase(env);
+
+    if (objectName) {
+      await database.collections.storageObjects?.updateStorageObjectTags(bucketName, objectName, tags);
+    } else {
+      await database.collections.storageBuckets?.updateStorageBucketTags(bucketName, tags);
+    }
+  } catch (e) {
+    logger.logError('indexStorageTags', 'Error during bucket indexing', e);
+    throw e;
+  } finally {
+    await database.disconnectFromDatabase();
+  }
 };
