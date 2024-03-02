@@ -8,8 +8,7 @@ export class MongoDBSyncStatus {
     this.collection = collection;
   }
 
-  async ensureIndexes() {
-  }
+  async ensureIndexes() {}
 
   async getSyncStatus(storageType: string): Promise<DBSyncStatus | null | undefined> {
     const query = { storageType: storageType };

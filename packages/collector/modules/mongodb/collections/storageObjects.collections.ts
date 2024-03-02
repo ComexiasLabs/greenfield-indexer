@@ -13,7 +13,7 @@ export class MongoDBStorageObjects {
     await this.collection?.createIndex({ indexDate: 1 });
     await this.collection?.createIndex({ bucketName: 1 });
     await this.collection?.createIndex({ objectName: 1 });
-    await this.collection?.createIndex({ "tags.key": 1, "tags.value": 1 });
+    await this.collection?.createIndex({ 'tags.key': 1, 'tags.value': 1 });
   }
 
   async addStorageObject(data: DBStorageObject) {

@@ -14,17 +14,19 @@ export interface StorageObjectApiData {
   source_type: string;
   checksums: string[];
   tags?: {
-    tags: {
-      key: string;
-      value: string;
-    }[] | null;
-  }
+    tags:
+      | {
+          key: string;
+          value: string;
+        }[]
+      | null;
+  };
 }
 
 export interface FetchObjectsResponse {
-  object_infos: StorageObjectApiData[],
+  object_infos: StorageObjectApiData[];
   pagination: {
-      next_key: string;
-      total: string;
-  }
+    next_key: string;
+    total: string;
+  };
 }

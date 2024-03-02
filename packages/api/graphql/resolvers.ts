@@ -1,6 +1,6 @@
-import { DEFAULT_LIMIT, DEFAULT_OFFSET } from "@core/const/constant";
-import { apiFetchBucketById, apiFetchBucketByName, apiFetchBucketsByTags } from "@handlers/apiBucketServices";
-import { apiFetchObjectById, apiFetchObjectsByTags } from "@handlers/apiObjectServices";
+import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '@core/const/constant';
+import { apiFetchBucketById, apiFetchBucketByName, apiFetchBucketsByTags } from '@handlers/apiBucketServices';
+import { apiFetchObjectById, apiFetchObjectsByTags } from '@handlers/apiObjectServices';
 
 const resolvers = {
   Query: {

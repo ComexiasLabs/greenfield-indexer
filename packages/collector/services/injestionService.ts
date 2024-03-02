@@ -1,26 +1,22 @@
-import {
-  indexStorageBucketBulk,
-  indexStorageObjectBulk,
-} from "./indexingService";
-import logger from "@/core/logger/logger";
-import { MongoDB } from "@/modules/mongodb/mongodb";
-import { StorageTypes } from "@/core/types/storageTypes";
-import { DBSyncStatus } from "@/modules/mongodb/models/dbSyncStatus.model";
-import {
-  DEFAULT_FETCH_BUCKET_LIMIT,
-} from "@/core/const/constant";
-import { fetchBuckets, fetchObjectsInBucket } from "./storageBucketService";
-import { DBStorageBucket } from "@/modules/mongodb/models/dbStorageBucket.model";
-import { Environments } from "@/core/types/environments";
+import { indexStorageBucketBulk, indexStorageObjectBulk } from './indexingService';
+import logger from '@/core/logger/logger';
+import { MongoDB } from '@/modules/mongodb/mongodb';
+import { StorageTypes } from '@/core/types/storageTypes';
+import { DBSyncStatus } from '@/modules/mongodb/models/dbSyncStatus.model';
+import { DEFAULT_FETCH_BUCKET_LIMIT } from '@/core/const/constant';
+import { fetchBuckets, fetchObjectsInBucket } from './storageBucketService';
+import { DBStorageBucket } from '@/modules/mongodb/models/dbStorageBucket.model';
+import { Environments } from '@/core/types/environments';
+import { InjestionChannels } from '@/core/types/injestionChannels';
 
 export const startInjest = async (env: Environments, type?: StorageTypes) => {
-  logger.logInfo("startInjest", "Begin");
+  logger.logInfo('startInjest', 'Begin');
 
   if (type) {
-    if (type === "Bucket") {
+    if (type === 'Bucket') {
       await syncBuckets(env);
     }
-    if (type === "Object") {
+    if (type === 'Object') {
       await syncObjects(env);
     }
   } else {
@@ -29,12 +25,11 @@ export const startInjest = async (env: Environments, type?: StorageTypes) => {
   }
 };
 
-export const syncBuckets = async (
-  env: Environments) => {
-  logger.logInfo("syncBuckets", "Begin");
+export const syncBuckets = async (env: Environments) => {
+  logger.logInfo('syncBuckets', 'Begin');
 
   // Get last sync status
-  const syncStatus = await getSyncStatus(env, "Bucket");
+  const syncStatus = await getSyncStatus(env, 'Bucket');
 
   // Fetch buckets data
   const bucketsData = await fetchBuckets(env, syncStatus?.paginationKey);
@@ -43,36 +38,26 @@ export const syncBuckets = async (
   await indexStorageBucketBulk(env, bucketsData.bucket_infos);
 
   // Update sync status
-  const receivedCount =
-    (syncStatus?.receivedCount || 0) + bucketsData.bucket_infos.length;
+  const receivedCount = (syncStatus?.receivedCount || 0) + bucketsData.bucket_infos.length;
   const paginationLimit = DEFAULT_FETCH_BUCKET_LIMIT;
   let paginationKey = bucketsData.pagination.next_key;
-  await updateSyncStatus(
-    env,
-    "Bucket",
-    receivedCount,
-    paginationLimit,
-    paginationKey || ""
-  );
+  await updateSyncStatus(env, 'Bucket', receivedCount, paginationLimit, paginationKey || '');
 
-  logger.logInfo("syncBuckets", "Finish");
+  logger.logInfo('syncBuckets', 'Finish');
 };
 
-export const syncObjects = async (
-  env: Environments) => {
-  logger.logInfo("syncObjects", "Begin");
+export const syncObjects = async (env: Environments) => {
+  logger.logInfo('syncObjects', 'Begin');
 
   // Get last sync status
-  const syncStatus = await getSyncStatus(env, "Object");
+  const syncStatus = await getSyncStatus(env, 'Object');
 
-  const indexDateSince: number = !isNaN(Number(syncStatus?.paginationKey))
-    ? Number(syncStatus?.paginationKey)
-    : 0;
+  const indexDateSince: number = !isNaN(Number(syncStatus?.paginationKey)) ? Number(syncStatus?.paginationKey) : 0;
 
   // Fetch bucket names from index
   const buckets = await getBucketsToSync(env, indexDateSince);
   if (!buckets || buckets.length === 0) {
-    logger.logInfo("syncObjects", "Nothing to sync");
+    logger.logInfo('syncObjects', 'Nothing to sync');
     return;
   }
 
@@ -93,32 +78,24 @@ export const syncObjects = async (
   const receivedCount = (syncStatus?.receivedCount || 0) + objectsIndexed;
   const paginationLimit = DEFAULT_FETCH_BUCKET_LIMIT;
   let paginationKey = `${buckets[buckets.length - 1].indexDate}`; // paginationKey for objects is the last bucket indexDate
-  await updateSyncStatus(
-    env,
-    "Object",
-    receivedCount,
-    paginationLimit,
-    paginationKey || ""
-  );
+  await updateSyncStatus(env, 'Object', receivedCount, paginationLimit, paginationKey || '');
 
-  logger.logInfo("syncObjects", "Finish");
+  logger.logInfo('syncObjects', 'Finish');
 };
 
 const getSyncStatus = async (
   env: Environments,
-  storageType: StorageTypes
+  storageType: StorageTypes,
 ): Promise<DBSyncStatus | null | undefined> => {
-  logger.logInfo("getSyncStatus", "Begin");
+  logger.logInfo('getSyncStatus', 'Begin');
 
   const database = new MongoDB();
   try {
     await database.connectToDatabase(env);
-    const syncStatus = await database.collections.syncStatus?.getSyncStatus(
-      storageType
-    );
+    const syncStatus = await database.collections.syncStatus?.getSyncStatus(storageType);
     return syncStatus;
   } catch (e) {
-    logger.logError("getSyncStatus", "Failed", e);
+    logger.logError('getSyncStatus', 'Failed', e);
   } finally {
     await database.disconnectFromDatabase();
   }
@@ -129,9 +106,9 @@ const updateSyncStatus = async (
   storageType: StorageTypes,
   receivedCount: number,
   paginationLimit: number,
-  paginationKey: string
+  paginationKey: string,
 ) => {
-  logger.logInfo("updateSyncStatus", "Begin");
+  logger.logInfo('updateSyncStatus', 'Begin');
 
   const data: DBSyncStatus = {
     storageType,
@@ -144,13 +121,11 @@ const updateSyncStatus = async (
   try {
     await database.connectToDatabase(env);
 
-    const syncStatus = await database.collections.syncStatus?.upsertSyncStatus(
-      data
-    );
+    const syncStatus = await database.collections.syncStatus?.upsertSyncStatus(data);
 
     return syncStatus;
   } catch (e) {
-    logger.logError("getSyncStatus", "Failed", e);
+    logger.logError('getSyncStatus', 'Failed', e);
   } finally {
     await database.disconnectFromDatabase();
   }
@@ -158,23 +133,18 @@ const updateSyncStatus = async (
 
 const getBucketsToSync = async (
   env: Environments,
-  indexDateSince: number
+  indexDateSince: number,
 ): Promise<DBStorageBucket[] | null | undefined> => {
-  logger.logInfo("getBucketsToSync", "Begin");
+  logger.logInfo('getBucketsToSync', 'Begin');
 
   const database = new MongoDB();
   try {
     await database.connectToDatabase(env);
-    const buckets =
-      await database.collections.storageBuckets?.getStorageBucketsByIndexDate(
-        indexDateSince,
-        0,
-        100
-      );
+    const buckets = await database.collections.storageBuckets?.getStorageBucketsByIndexDate(indexDateSince, 0, 100);
 
     return buckets;
   } catch (e) {
-    logger.logError("getSyncStatus", "Failed", e);
+    logger.logError('getSyncStatus', 'Failed', e);
   } finally {
     await database.disconnectFromDatabase();
   }
