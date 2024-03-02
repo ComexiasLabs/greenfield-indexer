@@ -1,10 +1,9 @@
-import { Environments } from "@/core/types/environments";
-import { startInjest } from "@/services/injestionService";
+import { Environments } from '@/core/types/environments';
+import { startInjest } from '@/services/injestionService';
 
-export const dynamic = "force-dynamic"; // static by default, unless reading the request
+export const dynamic = 'force-dynamic'; // static by default, unless reading the request
 
 export async function POST(request: Request) {
-
   if (process.env.CRON_SECRET) {
     const authHeader = request.headers.get('authorization');
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -18,6 +17,6 @@ export async function POST(request: Request) {
   const env: Environments = url.searchParams.get('env') === 'mainnet' ? 'Mainnet' : 'Testnet';
 
   await startInjest(env, 'Bucket');
-  
+
   return new Response(`Successfully triggered collection process.`);
 }

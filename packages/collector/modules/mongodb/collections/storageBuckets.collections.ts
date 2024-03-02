@@ -12,9 +12,9 @@ export class MongoDBStorageBuckets {
   async ensureIndexes() {
     await this.collection?.createIndex({ indexDate: 1 });
     await this.collection?.createIndex({ bucketName: 1 });
-    await this.collection?.createIndex({ "tags.key": 1, "tags.value": 1 });
+    await this.collection?.createIndex({ 'tags.key': 1, 'tags.value': 1 });
   }
-  
+
   async addStorageBucket(data: DBStorageBucket) {
     const result = await this.collection?.insertOne(data);
   }
@@ -31,18 +31,22 @@ export class MongoDBStorageBuckets {
     return result;
   }
 
-  async getStorageBucketsByIndexDate(indexDateSince: number, offset: number, limit: number): Promise<DBStorageBucket[] | null | undefined> {
+  async getStorageBucketsByIndexDate(
+    indexDateSince: number,
+    offset: number,
+    limit: number,
+  ): Promise<DBStorageBucket[] | null | undefined> {
     const query = {
       indexDate: {
-        $gte: indexDateSince
-      }
+        $gte: indexDateSince,
+      },
     };
-  
+
     const result = await this.collection?.find(query).sort({ indexDate: 1 }).skip(offset).limit(limit).toArray();
-  
+
     return result;
   }
-  
+
   async updateStorageBucket(id: string, data: DBStorageBucket) {
     const query = { _id: new ObjectId(id) };
     // @ts-ignore

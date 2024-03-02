@@ -20,7 +20,7 @@
       "@core/*": ["core/*"],
       "@graphql/*": ["graphql/*"],
       "@modules/*": ["modules/*"],
-      "@handlers/*": ["handlers/*"],
+      "@handlers/*": ["handlers/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

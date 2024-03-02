@@ -27,28 +27,15 @@ export class MongoDBStorageObjects {
     return result;
   }
 
-  async getStorageObjectByTags(tags: Tag[], limit: number, offset: number): Promise<DBPaginatedResult<DBStorageObject> | null | undefined> {
+  async getStorageObjectByTags(
+    tags: Tag[],
+    limit: number,
+    offset: number,
+  ): Promise<DBPaginatedResult<DBStorageObject> | null | undefined> {
     const query = {
       tags: {
-        $all: tags.map(tag => ({ $elemMatch: { key: tag.key, value: tag.value } }))
-      }
-    };
-    
-    const totalCount = await this.collection.countDocuments(query);
-
-    const result = await this.collection?.find(query).skip(offset).limit(limit).toArray();
-
-    return {
-      data: result,
-      totalCount,
-    };
-  }
-
-  async getStorageObjectByTagValues(tagValues: string[], limit: number, offset: number): Promise<DBPaginatedResult<DBStorageObject> | null | undefined> {
-    const query = {
-      tags: {
-        $all: tagValues.map(tagValue => ({ $elemMatch: { value: tagValue } }))
-      }
+        $all: tags.map((tag) => ({ $elemMatch: { key: tag.key, value: tag.value } })),
+      },
     };
 
     const totalCount = await this.collection.countDocuments(query);
@@ -61,11 +48,36 @@ export class MongoDBStorageObjects {
     };
   }
 
-  async getStorageObjectByTagKeys(tagKeys: string[], limit: number, offset: number): Promise<DBPaginatedResult<DBStorageObject> | null | undefined> {
+  async getStorageObjectByTagValues(
+    tagValues: string[],
+    limit: number,
+    offset: number,
+  ): Promise<DBPaginatedResult<DBStorageObject> | null | undefined> {
     const query = {
       tags: {
-        $all: tagKeys.map(tagKey => ({ $elemMatch: { key: tagKey } }))
-      }
+        $all: tagValues.map((tagValue) => ({ $elemMatch: { value: tagValue } })),
+      },
+    };
+
+    const totalCount = await this.collection.countDocuments(query);
+
+    const result = await this.collection?.find(query).skip(offset).limit(limit).toArray();
+
+    return {
+      data: result,
+      totalCount,
+    };
+  }
+
+  async getStorageObjectByTagKeys(
+    tagKeys: string[],
+    limit: number,
+    offset: number,
+  ): Promise<DBPaginatedResult<DBStorageObject> | null | undefined> {
+    const query = {
+      tags: {
+        $all: tagKeys.map((tagKey) => ({ $elemMatch: { key: tagKey } })),
+      },
     };
 
     const totalCount = await this.collection.countDocuments(query);

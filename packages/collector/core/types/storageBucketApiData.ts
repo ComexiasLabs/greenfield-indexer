@@ -10,17 +10,19 @@ export interface StorageBucketApiData {
   charged_read_quota: string;
   bucket_status: string;
   tags?: {
-    tags: {
-      key: string;
-      value: string;
-    }[] | null;
-  }
+    tags:
+      | {
+          key: string;
+          value: string;
+        }[]
+      | null;
+  };
 }
 
 export interface FetchBucketsResponse {
-  bucket_infos: StorageBucketApiData[],
+  bucket_infos: StorageBucketApiData[];
   pagination: {
-      next_key: string;
-      total: string;
-  }
+    next_key: string;
+    total: string;
+  };
 }

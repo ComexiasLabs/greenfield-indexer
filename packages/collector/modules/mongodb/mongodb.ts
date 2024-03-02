@@ -44,9 +44,7 @@ export class MongoDB {
     this.collections.storageObjects = new MongoDBStorageObjects(
       db.collection<DBStorageObject>(CollectionNames.StorageObjects),
     );
-    this.collections.syncStatus = new MongoDBSyncStatus(
-      db.collection<DBSyncStatus>(CollectionNames.SyncStatus),
-    );
+    this.collections.syncStatus = new MongoDBSyncStatus(db.collection<DBSyncStatus>(CollectionNames.SyncStatus));
 
     await this.collections.storageBuckets.ensureIndexes();
     await this.collections.storageObjects.ensureIndexes();

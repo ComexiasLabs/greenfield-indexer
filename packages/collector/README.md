@@ -39,9 +39,11 @@ curl --location --request POST 'https://greenfield-indexer-api.vercel.app/api/co
 ```
 
 ## API Documentation
+
 The Greenfield Indexer provides a set of API endpoints to trigger the ingestion and indexing of buckets and objects within the BNB Chain's Greenfield. These operations are essential for keeping the off-chain database up-to-date with the latest data from Greenfield.
 
 ### Authentication
+
 All API requests must be accompanied by an x-api-key header containing your API key. Unauthorized requests will be rejected.
 
 ```
@@ -51,6 +53,7 @@ Header: x-api-key: YourApiKeyHere
 ### Endpoints
 
 #### Collect All
+
 Trigger the ingestion and indexing process for both buckets and objects, starting from the last synchronization point.
 
 - Method: POST
@@ -65,6 +68,7 @@ curl -X POST https://greenfield-indexer-api.vercel.app/api/collect \
 ```
 
 #### Collect Buckets
+
 Initiate the ingestion and indexing of buckets only, resuming from the last synchronization point.
 
 - Method: POST
@@ -79,6 +83,7 @@ curl -X POST https://greenfield-indexer-api.vercel.app/api/collect/buckets \
 ```
 
 #### Collect Objects
+
 Start the ingestion and indexing process for objects, picking up from the last synchronization point.
 
 - Method: POST

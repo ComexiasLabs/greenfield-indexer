@@ -28,13 +28,17 @@ export class MongoDBStorageBuckets {
     return result;
   }
 
-  async getStorageBucketByTags(tags: Tag[], limit: number, offset: number): Promise<DBPaginatedResult<DBStorageBucket> | null | undefined> {
+  async getStorageBucketByTags(
+    tags: Tag[],
+    limit: number,
+    offset: number,
+  ): Promise<DBPaginatedResult<DBStorageBucket> | null | undefined> {
     logger.logInfo('getStorageBucketByTags', `tags: ${JSON.stringify(tags)}`);
 
     const query = {
       tags: {
-        $all: tags.map(tag => ({ $elemMatch: { key: tag.key, value: tag.value } }))
-      }
+        $all: tags.map((tag) => ({ $elemMatch: { key: tag.key, value: tag.value } })),
+      },
     };
 
     logger.logInfo('getStorageBucketByTags', `query: ${JSON.stringify(query)}`);
@@ -49,11 +53,15 @@ export class MongoDBStorageBuckets {
     };
   }
 
-  async getStorageBucketByTagValues(tagValues: string[], limit: number, offset: number): Promise<DBPaginatedResult<DBStorageBucket> | null | undefined> {
+  async getStorageBucketByTagValues(
+    tagValues: string[],
+    limit: number,
+    offset: number,
+  ): Promise<DBPaginatedResult<DBStorageBucket> | null | undefined> {
     const query = {
       tags: {
-        $all: tagValues.map(tagValue => ({ $elemMatch: { value: tagValue } }))
-      }
+        $all: tagValues.map((tagValue) => ({ $elemMatch: { value: tagValue } })),
+      },
     };
 
     const totalCount = await this.collection.countDocuments(query);
@@ -66,11 +74,15 @@ export class MongoDBStorageBuckets {
     };
   }
 
-  async getStorageBucketByTagKeys(tagKeys: string[], limit: number, offset: number): Promise<DBPaginatedResult<DBStorageBucket> | null | undefined> {
+  async getStorageBucketByTagKeys(
+    tagKeys: string[],
+    limit: number,
+    offset: number,
+  ): Promise<DBPaginatedResult<DBStorageBucket> | null | undefined> {
     const query = {
       tags: {
-        $all: tagKeys.map(tagKey => ({ $elemMatch: { key: tagKey } }))
-      }
+        $all: tagKeys.map((tagKey) => ({ $elemMatch: { key: tagKey } })),
+      },
     };
 
     const totalCount = await this.collection.countDocuments(query);
