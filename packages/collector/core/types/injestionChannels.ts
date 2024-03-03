@@ -1,1 +1,1 @@
-export type InjestionChannels = 'StorageBuckets' | 'StorageObjects' | 'Tx';
+export type InjestionChannels = 'Bucket' | 'Object' | 'Tx';
