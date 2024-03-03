@@ -119,7 +119,7 @@ export const indexStorageTags = async (env: Environments, bucketName: string, ob
       await database.collections.storageBuckets?.updateStorageBucketTags(bucketName, tags);
     }
   } catch (e) {
-    logger.logError('indexStorageTags', 'Error during bucket indexing', e);
+    logger.logError('indexStorageTags', 'Error during storage tags indexing', e);
     throw e;
   } finally {
     await database.disconnectFromDatabase();

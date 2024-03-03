@@ -66,8 +66,8 @@ For a full list of available endpoints and detailed usage instructions, please r
 
 **Greenfield Blockchain**
 
-- Storage API: The ListBuckets and ListObjects endpoints in Greenfield blockchain are used to fetch metadata for new buckets and objects.
-- Base API: The GetBlockByHeight endpoint is used to detect updates to existing buckets and objects through transactions. (Phase 2)
+- Storage API: The [ListBuckets](https://docs.bnbchain.org/greenfield-docs/docs/greenfield-api/list-buckets/) and [ListObjects](https://docs.bnbchain.org/greenfield-docs/docs/greenfield-api/list-objects/) endpoints in Greenfield blockchain are used to fetch metadata for new buckets and objects.
+- Base API: The [GetBlockByHeight](https://docs.bnbchain.org/greenfield-docs/docs/greenfield-api/get-block-by-height/) endpoint is used to detect updates to existing buckets and objects through transactions.
 
 ### Technical Considerations
 
@@ -82,6 +82,10 @@ The Greenfield Indexer is designed with modern architectural principles to ensur
 - **Asynchronous Operations**: Designed for asynchronous execution, the collection service allows for a "fire and forget" model of operation. Once initiated, it proceeds with the data ingestion and indexing processes independently, allowing calling processes to continue without waiting for completion.
 
 These considerations underscore our commitment to leveraging contemporary cloud-native technologies and practices to deliver a robust, efficient, and user-friendly service.
+
+### Upcoming Changes
+
+We are in the midst of migrating away from depending on the Storage API to only depending on the Blockchain API for indexing the storage buckets and objects. By listening to the `MsgCreateObject` and `MsgSetTag` transaction events, we can more confidently ensure data integrity and availability in real time.
 
 ## Getting Started
 
