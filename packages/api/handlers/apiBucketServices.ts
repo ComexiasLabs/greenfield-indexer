@@ -2,6 +2,7 @@ import { adaptStorageBucket } from '@core/adapters/storageBucketAdapter';
 import { determineTagFormat } from '@core/helpers/apiRequestHelper';
 import logger from '@core/logger/logger';
 import { StorageBucket, Tag } from '@core/types/api';
+import { SearchModes } from '@core/types/searchModes';
 import DBStorageBucket from '@modules/mongodb/models/dbStorageBucket.model';
 import { MongoDB } from '@modules/mongodb/mongodb';
 import { DBPaginatedResult } from '@modules/mongodb/types/pagination';
@@ -91,6 +92,40 @@ export const apiFetchBucketByName = async (name: string): Promise<StorageBucket 
     return adaptStorageBucket(data);
   } catch (e) {
     logger.logError('apiFetchBucketByName', 'Failed', e);
+    return null;
+  } finally {
+    await database.disconnectFromDatabase();
+  }
+};
+
+export const apiSearchBuckets = async (
+  keyword: string,
+  searchMode: SearchModes,
+  limit: number,
+  offset: number,
+): Promise<{ data: StorageBucket[]; totalCount: number }> => {
+  const database = new MongoDB();
+  try {
+    logger.logInfo('apiSearchBuckets', `Begin. keyword: ${keyword}, limit: ${limit}, offset: ${offset}`);
+
+    let data: DBPaginatedResult<DBStorageBucket>;
+    await database.connectToDatabase();
+
+    const useRegex = searchMode === SearchModes.Partial ? true : false;
+
+    data = await database.collections.storageBuckets?.searchStorageBucke(keyword, limit, offset, useRegex);
+
+    const result: StorageBucket[] = [];
+    data?.data?.forEach((item) => {
+      result.push(adaptStorageBucket(item));
+    });
+
+    return {
+      data: result,
+      totalCount: data.totalCount,
+    };
+  } catch (e) {
+    logger.logError('apiSearchBuckets', 'Failed', e);
     return null;
   } finally {
     await database.disconnectFromDatabase();

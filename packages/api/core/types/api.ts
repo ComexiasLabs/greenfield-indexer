@@ -1,3 +1,10 @@
+export type ApiSearchRequest = {
+  keyword: string;
+  searchMode: string;
+  limit?: number;
+  offset?: number;
+};
+
 export type ApiFindRequest = {
   tags: string;
   limit?: number;

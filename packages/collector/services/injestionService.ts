@@ -31,6 +31,8 @@ export const startInjest = async (env: Environments, channel?: InjestionChannels
     await syncObjects(env);
     await syncTx(env);
   }
+
+  logger.logInfo('startInjest', 'Process completed.');
 };
 
 export const syncBuckets = async (env: Environments) => {

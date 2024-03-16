@@ -12,6 +12,7 @@ export class MongoDBStorageBuckets {
   async ensureIndexes() {
     await this.collection?.createIndex({ indexDate: 1 });
     await this.collection?.createIndex({ bucketName: 1 });
+    await this.collection?.createIndex({ bucketName: 'text' });
     await this.collection?.createIndex({ 'tags.key': 1, 'tags.value': 1 });
   }
 
