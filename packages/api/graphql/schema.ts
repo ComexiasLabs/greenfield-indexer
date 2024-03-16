@@ -7,6 +7,8 @@ export const typeDefs = gql`
     findBucketById(id: Int!): StorageBucket
     findObjectById(id: Int!): StorageObject
     findBucketByName(name: String!): StorageBucket
+    searchBuckets(keyword: String!, searchMode: String, limit: Int, offset: Int): BucketsResult
+    searchObjects(keyword: String!, searchMode: String, limit: Int, offset: Int): ObjectsResult
   }
 
   input TagInput {

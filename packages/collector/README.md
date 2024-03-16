@@ -35,7 +35,7 @@ yarn build && yarn start
 The following endpoint will index the first 100 buckets. Subsequent invokations will index the next 100 buckets, and so on.
 
 ```
-curl --location --request POST 'https://greenfield-indexer-api.vercel.app/api/collect' --data ''
+curl --location --request POST 'https://www.greenfieldindexer.com/api/collect' --data ''
 ```
 
 ## API Documentation
@@ -57,13 +57,13 @@ Header: x-api-key: YourApiKeyHere
 Trigger the ingestion and indexing process for both buckets and objects, starting from the last synchronization point.
 
 - Method: POST
-- URL: https://greenfield-indexer-api.vercel.app/api/collect
+- URL: https://www.greenfieldindexer.com/api/collect
 - Headers: x-api-key: Your API key
 
 Example Request:
 
 ```
-curl -X POST https://greenfield-indexer-api.vercel.app/api/collect \
+curl -X POST https://www.greenfieldindexer.com/api/collect \
 -H "x-api-key: YourApiKeyHere"
 ```
 
@@ -72,13 +72,13 @@ curl -X POST https://greenfield-indexer-api.vercel.app/api/collect \
 Initiate the ingestion and indexing of buckets only, resuming from the last synchronization point.
 
 - Method: POST
-- URL: https://greenfield-indexer-api.vercel.app/api/collect/buckets
+- URL: https://www.greenfieldindexer.com/api/collect/buckets
 - Headers: x-api-key: Your API key
 
 -Example Request:
 
 ```
-curl -X POST https://greenfield-indexer-api.vercel.app/api/collect/buckets \
+curl -X POST https://www.greenfieldindexer.com/api/collect/buckets \
 -H "x-api-key: YourApiKeyHere"
 ```
 
@@ -87,12 +87,12 @@ curl -X POST https://greenfield-indexer-api.vercel.app/api/collect/buckets \
 Start the ingestion and indexing process for objects, picking up from the last synchronization point.
 
 - Method: POST
-- URL: https://greenfield-indexer-api.vercel.app/api/collect/objects
+- URL: https://www.greenfieldindexer.com/api/collect/objects
 - Headers: x-api-key: Your API key
 
 Example Request:
 
 ```
-curl -X POST https://greenfield-indexer-api.vercel.app/api/collect/objects \
+curl -X POST https://www.greenfieldindexer.com/api/collect/objects \
 -H "x-api-key: YourApiKeyHere"
 ```

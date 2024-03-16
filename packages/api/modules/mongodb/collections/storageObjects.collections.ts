@@ -27,6 +27,29 @@ export class MongoDBStorageObjects {
     return result;
   }
 
+  async searchStorageObject(
+    keyword: string,
+    limit: number,
+    offset: number,
+    useRegex: boolean = false,
+  ): Promise<DBPaginatedResult<DBStorageObject> | null | undefined> {
+    let query;
+    if (useRegex) {
+      query = { objectName: { $regex: keyword, $options: 'i' } };
+    } else {
+      query = { $text: { $search: keyword } };
+    }
+
+    const totalCount = await this.collection.countDocuments(query);
+
+    const result = await this.collection?.find(query).skip(offset).limit(limit).toArray();
+
+    return {
+      data: result,
+      totalCount,
+    };
+  }
+
   async getStorageObjectByTags(
     tags: Tag[],
     limit: number,

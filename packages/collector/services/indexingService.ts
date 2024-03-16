@@ -77,8 +77,6 @@ export const mapStorageBucket = (rawBucket: StorageBucketApiData): DBStorageBuck
 };
 
 export const mapStorageObject = (rawObject: StorageObjectApiData): DBStorageObject => {
-  logger.logInfo('mapStorageObject', 'Begin');
-
   const additionalTags = [
     { key: '_owner', value: rawObject.owner },
     { key: '_visibility', value: rawObject.visibility },

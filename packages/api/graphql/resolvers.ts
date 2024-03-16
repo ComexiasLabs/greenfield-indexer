@@ -1,6 +1,11 @@
-import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '@core/const/constant';
-import { apiFetchBucketById, apiFetchBucketByName, apiFetchBucketsByTags } from '@handlers/apiBucketServices';
-import { apiFetchObjectById, apiFetchObjectsByTags } from '@handlers/apiObjectServices';
+import { DEFAULT_LIMIT, DEFAULT_OFFSET, DEFAULT_SEARCH_MODE } from '@core/const/constant';
+import {
+  apiFetchBucketById,
+  apiFetchBucketByName,
+  apiFetchBucketsByTags,
+  apiSearchBuckets,
+} from '@handlers/apiBucketServices';
+import { apiFetchObjectById, apiFetchObjectsByTags, apiSearchObjects } from '@handlers/apiObjectServices';
 
 const resolvers = {
   Query: {
@@ -34,6 +39,34 @@ const resolvers = {
     },
     findObjectById: async (_, { id }) => {
       return await apiFetchObjectById(id);
+    },
+    searchBuckets: async (
+      _,
+      { keyword, searchMode = DEFAULT_SEARCH_MODE, limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET },
+    ) => {
+      const result = await apiSearchBuckets(keyword, searchMode, limit, offset);
+      return {
+        data: result.data,
+        pagination: {
+          offset,
+          limit,
+          totalCount: result.totalCount,
+        },
+      };
+    },
+    searchObjects: async (
+      _,
+      { keyword, searchMode = DEFAULT_SEARCH_MODE, limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET },
+    ) => {
+      const result = await apiSearchObjects(keyword, searchMode, limit, offset);
+      return {
+        data: result.data,
+        pagination: {
+          offset,
+          limit,
+          totalCount: result.totalCount,
+        },
+      };
     },
   },
 };

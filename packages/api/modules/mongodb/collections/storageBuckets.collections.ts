@@ -28,6 +28,29 @@ export class MongoDBStorageBuckets {
     return result;
   }
 
+  async searchStorageBucke(
+    keyword: string,
+    limit: number,
+    offset: number,
+    useRegex: boolean = false,
+  ): Promise<DBPaginatedResult<DBStorageBucket> | null | undefined> {
+    let query;
+    if (useRegex) {
+      query = { bucketName: { $regex: keyword, $options: 'i' } };
+    } else {
+      query = { $text: { $search: keyword } };
+    }
+
+    const totalCount = await this.collection.countDocuments(query);
+
+    const result = await this.collection?.find(query).skip(offset).limit(limit).toArray();
+
+    return {
+      data: result,
+      totalCount,
+    };
+  }
+
   async getStorageBucketByTags(
     tags: Tag[],
     limit: number,
@@ -42,7 +65,7 @@ export class MongoDBStorageBuckets {
     };
 
     logger.logInfo('getStorageBucketByTags', `query: ${JSON.stringify(query)}`);
-    console.log();
+
     const totalCount = await this.collection.countDocuments(query);
 
     const result = await this.collection?.find(query).skip(offset).limit(limit).toArray();
