@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     const data: ResponseData = {
       status: 'Online',
-      lastIndexBlockHeight: result.lastIndexBlockHeight
+      lastIndexBlockHeight: result.lastIndexBlockHeight,
     };
 
     return res.status(200).json(data);

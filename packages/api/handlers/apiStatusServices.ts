@@ -15,7 +15,7 @@ export const apiFetchSyncStatus = async (): Promise<{ lastIndexBlockHeight: numb
     }
 
     return {
-      lastIndexBlockHeight: data.blockHeight
+      lastIndexBlockHeight: data.blockHeight,
     };
   } catch (e) {
     logger.logError('apiFetchSyncStatus', 'Failed', e);
