@@ -1,15 +1,44 @@
+import { ApiFindRequest } from '@core/types/api';
+import { apiFetchSyncStatus } from '@handlers/apiStatusServices';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-type Data = {
-  name: string;
+interface FetchSyncStatusResponse {
+  status: string;
+  lastIndexBlockHeight: number;
+}
+
+export type RequestData = ApiFindRequest;
+
+type ResponseData = FetchSyncStatusResponse;
+
+type ResponseError = {
+  message: string;
 };
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  // if (req.method === 'POST') {
-  //   // Process a POST request
-  // } else {
-  //   // Handle any other HTTP method
-  // }
+export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseData | ResponseError>) {
+  if (req.method !== 'GET') {
+    return res.status(400).json({ message: 'HTTP status not supported.' });
+  }
 
-  return res.status(200).json({ name: 'Successful' });
+  try {
+    // const validKey = verifyApiKey(req.headers['x-api-key']);
+    // if (!validKey) {
+    //   return res.status(403).json({ message: 'Invalid API Key.' });
+    // }
+
+    const result = await apiFetchSyncStatus();
+    if (!result) {
+      return res.status(400).json({ message: 'Unable to get sync status.' });
+    }
+
+    const data: ResponseData = {
+      status: 'Online',
+      lastIndexBlockHeight: result.lastIndexBlockHeight
+    };
+
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: 'An error has occured on the server.' });
+  }
 }

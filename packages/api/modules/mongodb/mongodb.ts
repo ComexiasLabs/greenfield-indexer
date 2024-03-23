@@ -1,13 +1,16 @@
 import * as mongoDB from 'mongodb';
 import { Config } from '@core/config/config';
-import DBStorageBucket from './models/dbStorageBucket.model';
-import DBStorageObject from './models/dbStorageObject.model';
+import { DBStorageBucket } from './models/dbStorageBucket.model';
+import { DBStorageObject } from './models/dbStorageObject.model';
+import { DBSyncStatus } from './models/dbSyncStatus.model';
+import { MongoDBSyncStatus } from './collections/syncStatus.collections';
 import { MongoDBStorageBuckets } from './collections/storageBuckets.collections';
 import { MongoDBStorageObjects } from './collections/storageObjects.collections';
 
 enum CollectionNames {
   StorageBuckets = 'buckets',
   StorageObjects = 'objects',
+  SyncStatus = 'sync_status',
 }
 
 export class MongoDB {
@@ -16,6 +19,7 @@ export class MongoDB {
   public collections: {
     storageBuckets?: MongoDBStorageBuckets;
     storageObjects?: MongoDBStorageObjects;
+    syncStatus?: MongoDBSyncStatus;
   } = {};
 
   constructor() {}
@@ -35,6 +39,7 @@ export class MongoDB {
     this.collections.storageObjects = new MongoDBStorageObjects(
       db.collection<DBStorageObject>(CollectionNames.StorageObjects),
     );
+    this.collections.syncStatus = new MongoDBSyncStatus(db.collection<DBSyncStatus>(CollectionNames.SyncStatus));
 
     console.log(`Successfully connected to database: ${db.databaseName}`);
   }

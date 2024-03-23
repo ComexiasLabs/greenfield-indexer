@@ -1,6 +1,6 @@
 import * as mongoDB from 'mongodb';
 import { ObjectId } from 'mongodb';
-import DBStorageBucket from '../models/dbStorageBucket.model';
+import { DBStorageBucket } from '../models/dbStorageBucket.model';
 import { Tag } from '@core/types/api';
 import { DBPaginatedResult } from '../types/pagination';
 import logger from '@core/logger/logger';
