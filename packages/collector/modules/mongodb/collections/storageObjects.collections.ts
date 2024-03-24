@@ -52,4 +52,10 @@ export class MongoDBStorageObjects {
 
     await this.collection?.updateOne(query, update);
   }
+
+  async deleteStorageBucketByName(bucketName: string, objectName: string) {
+    const query = { bucketName: bucketName, objectName: objectName };
+    // @ts-ignore
+    await this.collection?.deleteOne(query);
+  }
 }

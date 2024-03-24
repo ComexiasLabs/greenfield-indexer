@@ -48,6 +48,17 @@ export class MongoDBStorageBuckets {
     return result;
   }
 
+  async getStorageBucketsByStatus(
+    indexStatus: string,
+    offset: number,
+    limit: number,
+  ): Promise<DBStorageBucket[] | null | undefined> {
+    const query = { indexStatus: indexStatus };
+    const result = await this.collection?.find(query).sort({ indexDate: 1 }).skip(offset).limit(limit).toArray();
+
+    return result;
+  }
+
   async updateStorageBucket(id: string, data: DBStorageBucket) {
     const query = { _id: new ObjectId(id) };
     // @ts-ignore
@@ -71,5 +82,25 @@ export class MongoDBStorageBuckets {
     const update = { $set: { tags: tags } };
 
     await this.collection?.updateOne(query, update);
+  }
+
+  async updateStorageBucketIndexStatus(bucketName: string, indexStatus: string) {
+    const query = { bucketName: bucketName };
+    const update = { $set: { indexStatus: indexStatus } };
+
+    await this.collection?.updateMany(query, update);
+  }
+
+  async deleteStorageBucketByName(bucketName: string) {
+    const query = { bucketName: bucketName };
+    await this.collection?.deleteOne(query);
+  }
+
+  async deleteStorageBucketWithNoId(indexStatus: string) {
+    const query = {
+      bucketStatus: '',
+      indexStatus: indexStatus,
+    };
+    await this.collection?.deleteOne(query);
   }
 }

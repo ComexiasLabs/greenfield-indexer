@@ -12,6 +12,7 @@ export interface DBStorageBucket {
   createdAtBlock: number;
   tags: Tag[];
   indexDate: number;
+  indexStatus: string;
 }
 
 /**

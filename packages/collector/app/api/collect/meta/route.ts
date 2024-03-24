@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   const url = new URL(request.url);
   const env: Environments = url.searchParams.get('env') === 'mainnet' ? 'Mainnet' : 'Testnet';
 
-  await startInjest(env, InjestionChannels.Tx);
+  await startInjest(env, InjestionChannels.Meta);
 
   return new Response(`Successfully triggered collection process.`);
 }

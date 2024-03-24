@@ -1,3 +1,4 @@
+import { BucketIndexStatuses } from '@/core/enum/bucketIndexStatuses';
 import logger from '@/core/logger/logger';
 import { Environments } from '@/core/types/environments';
 import { StorageBucketApiData } from '@/core/types/storageBucketApiData';
@@ -7,7 +8,11 @@ import { DBStorageBucket } from '@/modules/mongodb/models/dbStorageBucket.model'
 import { DBStorageObject } from '@/modules/mongodb/models/dbStorageObject.model';
 import { MongoDB } from '@/modules/mongodb/mongodb';
 
-export const indexStorageBucketBulk = async (env: Environments, buckets: StorageBucketApiData[]) => {
+export const indexStorageBucketBulk = async (
+  env: Environments,
+  buckets: StorageBucketApiData[],
+  indexStatus: BucketIndexStatuses,
+) => {
   logger.logInfo('indexStorageBucketBulk', 'Begin');
 
   const database = new MongoDB();
@@ -16,7 +21,7 @@ export const indexStorageBucketBulk = async (env: Environments, buckets: Storage
 
     await Promise.all(
       buckets.map(async (bucket) => {
-        const data = mapStorageBucket(bucket);
+        const data = mapStorageBucket(bucket, indexStatus);
         await database.collections.storageBuckets?.upsertStorageBucket(data);
       }),
     );
@@ -49,7 +54,10 @@ export const indexStorageObjectBulk = async (env: Environments, objects: Storage
   }
 };
 
-export const mapStorageBucket = (rawBucket: StorageBucketApiData): DBStorageBucket => {
+export const mapStorageBucket = (
+  rawBucket: StorageBucketApiData,
+  indexStatus: BucketIndexStatuses,
+): DBStorageBucket => {
   logger.logInfo('mapStorageBucket', 'Begin');
 
   const additionalTags = [
@@ -68,9 +76,10 @@ export const mapStorageBucket = (rawBucket: StorageBucketApiData): DBStorageBuck
     createdAtBlock: parseInt(rawBucket.create_at),
     tags: [
       ...additionalTags,
-      ...(rawBucket.tags ? rawBucket.tags.tags!.map((tag) => ({ key: tag.key, value: tag.value })) : []),
+      ...(rawBucket.tags?.tags ? rawBucket.tags.tags!.map((tag) => ({ key: tag.key, value: tag.value })) : []),
     ],
     indexDate: Date.now(),
+    indexStatus,
   };
 
   return result;
@@ -117,7 +126,75 @@ export const indexStorageTags = async (env: Environments, bucketName: string, ob
       await database.collections.storageBuckets?.updateStorageBucketTags(bucketName, tags);
     }
   } catch (e) {
-    logger.logError('indexStorageTags', 'Error during storage tags indexing', e);
+    logger.logError('indexStorageTags', 'Error', e);
+    throw e;
+  } finally {
+    await database.disconnectFromDatabase();
+  }
+};
+
+export const updateStorageBucketStatus = async (
+  env: Environments,
+  bucketName: string,
+  indexStatus: BucketIndexStatuses,
+) => {
+  logger.logInfo('updateStorageBucketStatus', 'Begin');
+
+  const database = new MongoDB();
+  try {
+    await database.connectToDatabase(env);
+
+    await database.collections.storageBuckets?.updateStorageBucketIndexStatus(bucketName, indexStatus);
+  } catch (e) {
+    logger.logError('updateStorageBucketStatus', 'Error', e);
+    throw e;
+  } finally {
+    await database.disconnectFromDatabase();
+  }
+};
+
+export const deleleStorageBucket = async (env: Environments, bucketName: string) => {
+  logger.logInfo('deleleStorageBucket', 'Begin');
+
+  const database = new MongoDB();
+  try {
+    await database.connectToDatabase(env);
+
+    await database.collections.storageBuckets?.deleteStorageBucketByName(bucketName);
+  } catch (e) {
+    logger.logError('deleleStorageBucket', 'Error', e);
+    throw e;
+  } finally {
+    await database.disconnectFromDatabase();
+  }
+};
+
+export const deleleStorageObject = async (env: Environments, bucketName: string, objectName: string) => {
+  logger.logInfo('deleleStorageObject', 'Begin');
+
+  const database = new MongoDB();
+  try {
+    await database.connectToDatabase(env);
+
+    await database.collections.storageObjects?.deleteStorageBucketByName(bucketName, objectName);
+  } catch (e) {
+    logger.logError('deleleStorageObject', 'Error', e);
+    throw e;
+  } finally {
+    await database.disconnectFromDatabase();
+  }
+};
+
+export const deleteProcessedCache = async (env: Environments) => {
+  logger.logInfo('deleteProcessedCache', 'Begin');
+
+  const database = new MongoDB();
+  try {
+    await database.connectToDatabase(env);
+
+    await database.collections.storageBuckets?.deleteStorageBucketWithNoId(BucketIndexStatuses.SyncComplete);
+  } catch (e) {
+    logger.logError('deleteProcessedCache', 'Error', e);
     throw e;
   } finally {
     await database.disconnectFromDatabase();

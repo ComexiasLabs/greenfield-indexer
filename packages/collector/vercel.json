@@ -1,11 +1,19 @@
 {
   "crons": [
     {
-      "path": "/api/collect?env=testnet",
+      "path": "/api/collect/tx?env=testnet",
       "schedule": "* * * * *"
     },
     {
-      "path": "/api/collect?env=mainnet",
+      "path": "/api/collect/tx?env=mainnet",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/collect/meta?env=testnet",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/collect/meta?env=mainnet",
       "schedule": "* * * * *"
     }
   ]

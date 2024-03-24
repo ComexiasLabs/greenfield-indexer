@@ -26,3 +26,7 @@ export interface FetchBucketsResponse {
     total: string;
   };
 }
+
+export interface FetchBucketMetaResponse {
+  data: StorageBucketApiData;
+}
