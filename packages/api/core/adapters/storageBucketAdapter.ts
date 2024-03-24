@@ -1,5 +1,5 @@
 import { StorageBucket } from '@core/types/api';
-import DBStorageBucket from '@modules/mongodb/models/dbStorageBucket.model';
+import { DBStorageBucket } from '@modules/mongodb/models/dbStorageBucket.model';
 
 export const adaptStorageBucket = (data: DBStorageBucket): StorageBucket => {
   const result: StorageBucket = {

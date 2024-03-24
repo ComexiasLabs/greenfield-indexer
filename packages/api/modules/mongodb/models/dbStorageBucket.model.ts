@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 
-export default interface DBStorageBucket {
+export interface DBStorageBucket {
   _id?: ObjectId;
   itemId: number;
   bucketName: string;
@@ -14,6 +14,7 @@ export default interface DBStorageBucket {
     value: string;
   }[];
   indexDate: number;
+  indexStatus: string;
 }
 
 /**

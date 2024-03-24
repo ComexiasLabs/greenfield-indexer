@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 
-export default interface DBStorageObject {
+export interface DBStorageObject {
   _id?: ObjectId;
   itemId: number;
   bucketName: string;

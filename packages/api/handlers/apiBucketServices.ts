@@ -3,7 +3,7 @@ import { determineTagFormat } from '@core/helpers/apiRequestHelper';
 import logger from '@core/logger/logger';
 import { StorageBucket, Tag } from '@core/types/api';
 import { SearchModes } from '@core/types/searchModes';
-import DBStorageBucket from '@modules/mongodb/models/dbStorageBucket.model';
+import { DBStorageBucket } from '@modules/mongodb/models/dbStorageBucket.model';
 import { MongoDB } from '@modules/mongodb/mongodb';
 import { DBPaginatedResult } from '@modules/mongodb/types/pagination';
 

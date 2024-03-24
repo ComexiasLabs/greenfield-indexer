@@ -1,12 +1,13 @@
 import { Config } from '@/core/config/config';
-import { BUCKETS_DATA_FILEPATH, DEFAULT_FETCH_BUCKET_LIMIT, OBJECTS_DATA_FILEPATH } from '@/core/const/constant';
+import { DEFAULT_FETCH_BUCKET_LIMIT } from '@/core/const/constant';
 import logger from '@/core/logger/logger';
-import { FetchBucketsResponse, StorageBucketApiData } from '@/core/types/storageBucketApiData';
+import { FetchBucketMetaResponse, FetchBucketsResponse, StorageBucketApiData } from '@/core/types/storageBucketApiData';
 import { FetchObjectsResponse } from '@/core/types/storageObjectApiData';
 import axios from 'axios';
 import { writeToJsonFile } from './fileService';
 import { encodeForFilePath } from '@/core/utils/fileUtils';
 import { Environments } from '@/core/types/environments';
+import { parseStringPromise } from 'xml2js';
 
 export const fetchBuckets = async (env: Environments, paginationKey?: string): Promise<FetchBucketsResponse> => {
   logger.logInfo('fetchBuckets', `Begin. paginationKey: ${paginationKey}`);
@@ -27,28 +28,25 @@ export const fetchBuckets = async (env: Environments, paginationKey?: string): P
     });
 
     if (response.data && response.data.bucket_infos) {
-      // Write to data file
-      if (Config.environment === 'local') {
-        writeToJsonFile(
-          `${BUCKETS_DATA_FILEPATH.replace('{env}', env)}/data-limit-${DEFAULT_FETCH_BUCKET_LIMIT}-paginationkey-${encodeForFilePath(
-            paginationKey,
-          )}.json`,
-          response.data,
-        );
-      }
-
       return response.data;
     } else {
       throw new Error('Unexpected response structure');
     }
   } catch (error) {
-    console.error('Failed to fetch buckets data:', error);
+    logger.logError('fetchBuckets', 'Error', error);
     throw new Error('Failed to fetch buckets data');
   }
 };
 
-export const fetchObjectsInBucket = async (env: Environments, bucketName: string): Promise<FetchObjectsResponse> => {
-  logger.logInfo('fetchBuckets', `Begin. bucketName: ${bucketName}`);
+export const fetchObjectsInBucket = async (
+  env: Environments,
+  bucketName: string,
+): Promise<FetchObjectsResponse | null> => {
+  logger.logInfo('fetchObjectsInBucket', `Begin. bucketName: ${bucketName}`);
+
+  if (!bucketName) {
+    return null;
+  }
 
   const rpcURL = env === 'Mainnet' ? Config.greenfieldBlockchainRPCMainnet : Config.greenfieldBlockchainRPCTestnet;
   const baseURL = `${rpcURL}/greenfield/storage/list_objects/${bucketName}`;
@@ -57,20 +55,80 @@ export const fetchObjectsInBucket = async (env: Environments, bucketName: string
     const response = await axios.get<FetchObjectsResponse>(baseURL);
 
     if (response.data && response.data.object_infos) {
-      // Write to data file
-      if (Config.environment === 'local') {
-        writeToJsonFile(
-          `${OBJECTS_DATA_FILEPATH.replace('{env}', env)}/data-bucketname-${encodeForFilePath(bucketName)}.json`,
-          response.data,
-        );
-      }
-
       return response.data;
     } else {
       throw new Error('Unexpected response structure');
     }
   } catch (error) {
-    console.error('Failed to fetch buckets data:', error);
-    throw new Error('Failed to fetch buckets data');
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      logger.logWarning('fetchObjectsInBucket', `Requested bucket metadata not found for bucketName: ${bucketName}`);
+      return null;
+    } else {
+      logger.logError('fetchObjectsInBucket', 'Error', error);
+      return null;
+    }
+  }
+};
+
+export const fetchBucketMeta = async (
+  env: Environments,
+  bucketName: string,
+): Promise<FetchBucketMetaResponse | null> => {
+  logger.logInfo('fetchBucketMeta', `Begin. bucketName: ${bucketName}`);
+
+  if (!bucketName) {
+    return null;
+  }
+
+  const storageProvider =
+    env === 'Mainnet' ? Config.greenfieldStorageProviderMainnet : Config.greenfieldStorageProviderTestnet;
+  const baseURL = `https://${bucketName}.${storageProvider}/?bucket-meta`;
+
+  try {
+    console.log(`baseURL: ${baseURL}`);
+    const response = await axios.get(baseURL);
+
+    const parsedResult = await parseStringPromise(response.data);
+
+    // Check if return not found code
+    if (parsedResult?.Error?.Code === '90008') {
+      return null;
+    }
+
+    const bucketMeta = parsedResult.GfSpGetBucketMetaResponse.Bucket[0].BucketInfo[0];
+
+    const tags =
+      bucketMeta.Tags && bucketMeta.Tags[0] !== ''
+        ? bucketMeta.Tags[0].Tags.map((tag: { Key: any[]; Value: any[] }) => ({
+            key: tag.Key[0],
+            value: tag.Value[0],
+          }))
+        : null;
+
+    const result = {
+      data: {
+        owner: bucketMeta.Owner[0],
+        bucket_name: bucketMeta.BucketName[0],
+        visibility: bucketMeta.Visibility[0],
+        id: bucketMeta.Id[0],
+        source_type: bucketMeta.SourceType[0],
+        create_at: bucketMeta.CreateAt[0],
+        payment_address: bucketMeta.PaymentAddress[0],
+        global_virtual_group_family_id: parseInt(bucketMeta.GlobalVirtualGroupFamilyId[0], 10),
+        charged_read_quota: bucketMeta.ChargedReadQuota[0],
+        bucket_status: bucketMeta.BucketStatus[0],
+        tags: { tags },
+      },
+    };
+
+    return result;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      logger.logWarning('fetchBucketMeta', `Requested bucket metadata not found for bucketName: ${bucketName}`);
+      return null;
+    } else {
+      logger.logError('fetchBucketMeta', 'Error', error);
+      return null;
+    }
   }
 };

@@ -1,3 +1,4 @@
+import { InjestionChannels } from '@/core/enum/injestionChannels';
 import { Environments } from '@/core/types/environments';
 import { startInjest } from '@/services/injestionService';
 
@@ -16,7 +17,7 @@ export async function POST(request: Request) {
   const url = new URL(request.url);
   const env: Environments = url.searchParams.get('env') === 'mainnet' ? 'Mainnet' : 'Testnet';
 
-  await startInjest(env, 'Object');
+  await startInjest(env, InjestionChannels.BulkObject);
 
   return new Response(`Successfully triggered collection process.`);
 }
