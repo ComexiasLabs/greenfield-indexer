@@ -1,0 +1,31 @@
+.main {
+  width: 100%;
+}
+
+.intro {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 180px;
+
+  p {
+    color: white;
+    font-family: 'Nunito', sans-serif;
+  }
+}
+
+.mainTitle {
+  font-family: 'Nunito', sans-serif;
+  -webkit-box-decoration-break: clone;
+  background-image: url(https://images.unsplash.com/photo-1666760012382-fbe424732e4d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDZ8Q0R3dXdYSkFiRXd8fGVufDB8fHx8fA%3D%3D);
+  background-size: 50% auto;
+  background-position: 20% 20%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  --tw-saturate: saturate(3.5);
+  filter: var(--tw-filter);
+  font-size: 52px;
+  font-weight: 700;
+}
+

@@ -10,6 +10,11 @@
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,scss,md,json}' --config ./.prettierrc"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.14",
+    "@mui/lab": "^5.0.0-alpha.169",
+    "@mui/material": "^5.15.14",
     "apollo-server-micro": "^3.13.0",
     "axios": "^1.4.0",
     "graphql": "^16.8.1",
@@ -17,16 +22,18 @@
     "mongodb": "^4.8.0",
     "next": "12.2.0",
     "react": "18.2.0",
+    "react-code-blocks": "^0.1.6",
     "react-dom": "18.2.0",
     "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@types/node": "18.0.0",
-    "@types/react": "18.0.14",
-    "@types/react-dom": "18.0.5",
+    "@types/react": "^18.2.69",
+    "@types/react-dom": "^18.2.22",
     "eslint": "8.19.0",
     "eslint-config-next": "12.2.0",
     "prettier": "^3.2.5",
-    "typescript": "4.7.4"
+    "sass": "^1.72.0",
+    "typescript": "^5.4.3"
   }
 }

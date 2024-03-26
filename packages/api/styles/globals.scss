@@ -1,0 +1,18 @@
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  background-color: #091417;
+}
+
+.MuiTab-textColorPrimary {
+  color: white !important;
+}
+
+.MuiButton-textPrimary {
+  color: white !important;
+}
+
+.MuiButton-root:hover {
+  background-color: rgb(203 203 203 / 20%);
+}
