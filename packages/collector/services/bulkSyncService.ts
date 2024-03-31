@@ -6,7 +6,7 @@ import { fetchBuckets, fetchObjectsInBucket } from './storageBucketService';
 import { DBStorageBucket } from '@/modules/mongodb/models/dbStorageBucket.model';
 import { Environments } from '@/core/types/environments';
 import { getSyncStatus, updateSyncStatus } from './statusService';
-import { BucketIndexStatuses } from '@/core/enum/bucketIndexStatuses';
+import { BucketIndexStatuses } from '@/core/enum/indexStatuses';
 import { InjestionChannels } from '@/core/enum/injestionChannels';
 
 export const bulkSyncBuckets = async (env: Environments) => {

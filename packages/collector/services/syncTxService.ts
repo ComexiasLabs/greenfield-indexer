@@ -12,7 +12,7 @@ import { fetchBlock, fetchLatestBlockHeight, parseBlock } from './blockService';
 import { BlockApiData } from '@/core/types/blockchainApiData';
 import { getSyncStatus, updateSyncStatus } from './statusService';
 import { StorageBucketApiData } from '@/core/types/storageBucketApiData';
-import { BucketIndexStatuses } from '@/core/enum/bucketIndexStatuses';
+import { BucketIndexStatuses } from '@/core/enum/indexStatuses';
 import { InjestionChannels } from '@/core/enum/injestionChannels';
 
 export const syncTx = async (env: Environments) => {

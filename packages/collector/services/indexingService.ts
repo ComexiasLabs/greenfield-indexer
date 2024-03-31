@@ -1,4 +1,4 @@
-import { BucketIndexStatuses } from '@/core/enum/bucketIndexStatuses';
+import { BucketIndexStatuses, ObjectIndexStatuses } from '@/core/enum/indexStatuses';
 import logger from '@/core/logger/logger';
 import { Environments } from '@/core/types/environments';
 import { StorageBucketApiData } from '@/core/types/storageBucketApiData';
@@ -26,14 +26,18 @@ export const indexStorageBucketBulk = async (
       }),
     );
   } catch (e) {
-    logger.logError('indexStorageBucketBulk', 'Error during bucket indexing', e);
+    logger.logError('indexStorageBucketBulk', 'Error', e);
     throw e;
   } finally {
     await database.disconnectFromDatabase();
   }
 };
 
-export const indexStorageObjectBulk = async (env: Environments, objects: StorageObjectApiData[]) => {
+export const indexStorageObjectBulk = async (
+  env: Environments,
+  objects: StorageObjectApiData[],
+  indexStatus: ObjectIndexStatuses,
+) => {
   logger.logInfo('indexStorageObjectBulk', 'Begin');
 
   const database = new MongoDB();
@@ -42,12 +46,28 @@ export const indexStorageObjectBulk = async (env: Environments, objects: Storage
 
     await Promise.all(
       objects.map(async (object) => {
-        const data = mapStorageObject(object);
+        const data = mapStorageObject(object, indexStatus);
         await database.collections.storageObjects?.upsertStorageObject(data);
       }),
     );
   } catch (e) {
-    logger.logError('indexStorageObjectBulk', 'Error during bucket indexing', e);
+    logger.logError('indexStorageObjectBulk', 'Error', e);
+    throw e;
+  } finally {
+    await database.disconnectFromDatabase();
+  }
+};
+
+export const indexStorageContent = async (env: Environments, itemId: number, content: string) => {
+  logger.logInfo('indexStorageContent', 'Begin');
+
+  const database = new MongoDB();
+  try {
+    await database.connectToDatabase(env);
+
+    await database.collections.storageObjects?.updateStorageObjectContent(itemId, content);
+  } catch (e) {
+    logger.logError('indexStorageContent', 'Error', e);
     throw e;
   } finally {
     await database.disconnectFromDatabase();
@@ -85,7 +105,10 @@ export const mapStorageBucket = (
   return result;
 };
 
-export const mapStorageObject = (rawObject: StorageObjectApiData): DBStorageObject => {
+export const mapStorageObject = (
+  rawObject: StorageObjectApiData,
+  indexStatus: ObjectIndexStatuses,
+): DBStorageObject => {
   const additionalTags = [
     { key: '_owner', value: rawObject.owner },
     { key: '_visibility', value: rawObject.visibility },
@@ -108,6 +131,7 @@ export const mapStorageObject = (rawObject: StorageObjectApiData): DBStorageObje
       ...(rawObject.tags ? rawObject.tags.tags!.map((tag) => ({ key: tag.key, value: tag.value })) : []),
     ],
     indexDate: Date.now(),
+    indexStatus,
   };
 
   return result;
@@ -147,6 +171,26 @@ export const updateStorageBucketStatus = async (
     await database.collections.storageBuckets?.updateStorageBucketIndexStatus(bucketName, indexStatus);
   } catch (e) {
     logger.logError('updateStorageBucketStatus', 'Error', e);
+    throw e;
+  } finally {
+    await database.disconnectFromDatabase();
+  }
+};
+
+export const updateStorageObjectStatus = async (
+  env: Environments,
+  itemId: number,
+  indexStatus: ObjectIndexStatuses,
+) => {
+  logger.logInfo('updateStorageObjectStatus', 'Begin');
+
+  const database = new MongoDB();
+  try {
+    await database.connectToDatabase(env);
+
+    await database.collections.storageObjects?.updateStorageObjectIndexStatus(itemId, indexStatus);
+  } catch (e) {
+    logger.logError('updateStorageObjectStatus', 'Error', e);
     throw e;
   } finally {
     await database.disconnectFromDatabase();

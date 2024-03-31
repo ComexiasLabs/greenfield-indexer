@@ -5,3 +5,9 @@ export enum BucketIndexStatuses {
   BucketFetchFailed = 'BucketFetchFailed',
   ObjectsFetchFailed = 'ObjectsFetchFailed',
 }
+
+export enum ObjectIndexStatuses {
+  PendingContentSync = 'PendingContentSync',
+  SyncComplete = 'SyncComplete',
+  ContentFetchFailed = 'ContentFailedFetch',
+}

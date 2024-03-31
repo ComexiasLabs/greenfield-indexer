@@ -16,6 +16,7 @@ export interface DBStorageObject {
     value: string;
   }[];
   indexDate: number;
+  indexStatus: string;
 }
 
 /**

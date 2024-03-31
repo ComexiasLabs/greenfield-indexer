@@ -9,7 +9,7 @@ import { MongoDB } from '@/modules/mongodb/mongodb';
 import { fetchBucketMeta, fetchObjectsInBucket } from './storageBucketService';
 import { DBStorageBucket } from '@/modules/mongodb/models/dbStorageBucket.model';
 import { Environments } from '@/core/types/environments';
-import { BucketIndexStatuses } from '@/core/enum/bucketIndexStatuses';
+import { BucketIndexStatuses, ObjectIndexStatuses } from '@/core/enum/indexStatuses';
 
 export const syncBuckets = async (env: Environments) => {
   logger.logInfo('syncBuckets', 'Begin');
@@ -50,7 +50,7 @@ export const syncObjects = async (env: Environments) => {
       return;
     }
 
-    await indexStorageObjectBulk(env, objects.object_infos);
+    await indexStorageObjectBulk(env, objects.object_infos, ObjectIndexStatuses.PendingContentSync);
 
     await updateStorageBucketStatus(env, bucket.bucketName, BucketIndexStatuses.SyncComplete);
   });

@@ -4,10 +4,9 @@ import logger from '@/core/logger/logger';
 import { FetchBucketMetaResponse, FetchBucketsResponse, StorageBucketApiData } from '@/core/types/storageBucketApiData';
 import { FetchObjectsResponse } from '@/core/types/storageObjectApiData';
 import axios from 'axios';
-import { writeToJsonFile } from './fileService';
-import { encodeForFilePath } from '@/core/utils/fileUtils';
 import { Environments } from '@/core/types/environments';
 import { parseStringPromise } from 'xml2js';
+import { DBStorageObject } from '@/modules/mongodb/models/dbStorageObject.model';
 
 export const fetchBuckets = async (env: Environments, paginationKey?: string): Promise<FetchBucketsResponse> => {
   logger.logInfo('fetchBuckets', `Begin. paginationKey: ${paginationKey}`);
@@ -130,5 +129,69 @@ export const fetchBucketMeta = async (
       logger.logError('fetchBucketMeta', 'Error', error);
       return null;
     }
+  }
+};
+
+interface FetchObjectContentResponse {
+  status: 'Skipped' | 'Error' | 'Successful';
+  content?: string;
+}
+
+export const fetchObjectContent = async (
+  env: Environments,
+  object: DBStorageObject,
+): Promise<FetchObjectContentResponse> => {
+  logger.logInfo('fetchObjectContent', `Begin. bucket: ${object.bucketName} object: ${object.objectName} `);
+
+  if (!object) {
+    return {
+      status: 'Skipped',
+    };
+  }
+
+  if (object.visibility !== 'VISIBILITY_TYPE_PUBLIC_READ') {
+    return {
+      status: 'Skipped',
+    };
+  }
+
+  // TODO: Currently supporting only txt files (eg: https://mark.greenfield-sp.bnbchain.org/test.txt)
+  if (!(object.contentType === 'text/plain' && object.objectName.endsWith('.txt'))) {
+    return {
+      status: 'Skipped',
+    };
+  }
+
+  const maxDownloadBytes = 102400; // 100KB
+
+  const storageProvider =
+    env === 'Mainnet' ? Config.greenfieldStorageProviderMainnet : Config.greenfieldStorageProviderTestnet;
+  const contentUrl = `https://${object.bucketName}.${storageProvider}/${object.objectName}`;
+
+  try {
+    const response = await axios.get(contentUrl, {
+      headers: { Range: `bytes=0-${maxDownloadBytes - 1}` },
+      responseType: 'text',
+    });
+
+    return {
+      status: 'Successful',
+      content: response.data,
+    };
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 404) {
+        logger.logWarning('fetchObjectContent', `Requested object content not found: ${contentUrl}`);
+      } else if (error.response?.status === 416) {
+        logger.logWarning('fetchObjectContent', `Requested range not satisfiable: ${contentUrl}`);
+      } else {
+        logger.logError('fetchObjectContent', 'Axios Error', error);
+      }
+    } else {
+      logger.logError('fetchObjectContent', 'Unhandled error', error);
+    }
+    return {
+      status: 'Error',
+    };
   }
 };
