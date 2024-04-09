@@ -27,6 +27,17 @@ export class MongoDBStorageObjects {
     return result;
   }
 
+  async getStorageObjectsByStatus(
+    indexStatus: string,
+    offset: number,
+    limit: number,
+  ): Promise<DBStorageObject[] | null | undefined> {
+    const query = { indexStatus: indexStatus };
+    const result = await this.collection?.find(query).sort({ indexDate: 1 }).skip(offset).limit(limit).toArray();
+
+    return result;
+  }
+
   async updateStorageObject(id: string, data: DBStorageObject) {
     const query = { _id: new ObjectId(id) };
     // @ts-ignore
@@ -53,7 +64,21 @@ export class MongoDBStorageObjects {
     await this.collection?.updateOne(query, update);
   }
 
-  async deleteStorageBucketByName(bucketName: string, objectName: string) {
+  async updateStorageObjectIndexStatus(itemId: number, indexStatus: string) {
+    const query = { itemId: itemId };
+    const update = { $set: { indexStatus: indexStatus } };
+
+    await this.collection?.updateOne(query, update);
+  }
+
+  async updateStorageObjectContent(itemId: number, content: string) {
+    const query = { itemId: itemId };
+    const update = { $set: { content: content } };
+
+    await this.collection?.updateOne(query, update);
+  }
+
+  async deleteStorageObjectByName(bucketName: string, objectName: string) {
     const query = { bucketName: bucketName, objectName: objectName };
     // @ts-ignore
     await this.collection?.deleteOne(query);

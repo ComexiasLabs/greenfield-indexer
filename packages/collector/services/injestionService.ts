@@ -4,6 +4,7 @@ import { InjestionChannels } from '@/core/enum/injestionChannels';
 import { syncTx } from './syncTxService';
 import { bulkSyncBuckets, bulkSyncObjects } from './bulkSyncService';
 import { cleanup, syncBuckets, syncObjects } from './syncMetadataService';
+import { syncContents } from './syncContentService';
 
 export const startInjest = async (env: Environments, channel?: InjestionChannels) => {
   logger.logInfo('startInjest', 'Begin');
@@ -17,6 +18,9 @@ export const startInjest = async (env: Environments, channel?: InjestionChannels
       await syncObjects(env);
       await cleanup(env);
     }
+    if (channel === InjestionChannels.Content) {
+      await syncContents(env);
+    }
     if (channel === InjestionChannels.BulkBucket) {
       await bulkSyncBuckets(env);
     }
@@ -27,6 +31,7 @@ export const startInjest = async (env: Environments, channel?: InjestionChannels
     await syncTx(env);
     await syncBuckets(env);
     await syncObjects(env);
+    await syncContents(env);
   }
 
   logger.logInfo('startInjest', 'Process completed.');

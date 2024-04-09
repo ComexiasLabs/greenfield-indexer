@@ -3,4 +3,5 @@ export enum InjestionChannels {
   BulkObject = 'BulkObject',
   Tx = 'Tx',
   Meta = 'Meta',
+  Content = 'Content',
 }

@@ -15,6 +15,14 @@
     {
       "path": "/api/collect/meta?env=mainnet",
       "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/collect/content?env=testnet",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/collect/content?env=mainnet",
+      "schedule": "* * * * *"
     }
   ]
 }
