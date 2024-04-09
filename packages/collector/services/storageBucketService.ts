@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Environments } from '@/core/types/environments';
 import { parseStringPromise } from 'xml2js';
 import { DBStorageObject } from '@/modules/mongodb/models/dbStorageObject.model';
+import { getContentUrl } from '@/modules/greenfield/helper';
 
 export const fetchBuckets = async (env: Environments, paginationKey?: string): Promise<FetchBucketsResponse> => {
   logger.logInfo('fetchBuckets', `Begin. paginationKey: ${paginationKey}`);
@@ -162,9 +163,7 @@ export const fetchObjectContent = async (
 
   const maxDownloadBytes = 102400; // 100KB
 
-  const storageProvider =
-    env === 'Mainnet' ? Config.greenfieldStorageProviderMainnet : Config.greenfieldStorageProviderTestnet;
-  const contentUrl = `https://${object.bucketName}.${storageProvider}/${object.objectName}`;
+  const contentUrl = getContentUrl(env, object.bucketName, object.objectName);
 
   logger.logInfo('fetchObjectContent', `Fetching object: ${contentUrl}`);
 

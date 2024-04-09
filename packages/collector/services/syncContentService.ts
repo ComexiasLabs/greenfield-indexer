@@ -5,6 +5,7 @@ import { fetchObjectContent } from './storageBucketService';
 import { Environments } from '@/core/types/environments';
 import { ObjectIndexStatuses } from '@/core/enum/indexStatuses';
 import { DBStorageObject } from '@/modules/mongodb/models/dbStorageObject.model';
+import { getContentUrl } from '@/modules/greenfield/helper';
 
 export const syncContents = async (env: Environments) => {
   logger.logInfo('syncContents', 'Begin');
@@ -33,6 +34,7 @@ export const syncContents = async (env: Environments) => {
         object.objectName,
         object.contentType,
         content.content!,
+        getContentUrl(env, object.bucketName, object.objectName)
       );
 
       await updateStorageObjectStatus(env, object.itemId, ObjectIndexStatuses.SyncComplete);

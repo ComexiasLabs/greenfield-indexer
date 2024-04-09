@@ -66,6 +66,7 @@ export const indexStorageContent = async (
   objectName: string,
   contentType: string,
   content: string,
+  contentUrl: string,
 ) => {
   logger.logInfo('indexStorageContent', 'Begin');
 
@@ -79,6 +80,7 @@ export const indexStorageContent = async (
       objectName,
       contentType,
       content,
+      contentUrl,
       indexDate: Date.now(),
     };
 

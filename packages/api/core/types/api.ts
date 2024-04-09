@@ -33,6 +33,14 @@ export interface StorageObject {
   tags: Tag[];
 }
 
+export interface StorageContent {
+  id: number;
+  bucketName: string;
+  objectName: string;
+  contentType: string;
+  contentUrl: string;
+}
+
 export interface Tag {
   key?: string;
   value?: string;

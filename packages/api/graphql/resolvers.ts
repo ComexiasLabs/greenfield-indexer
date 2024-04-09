@@ -5,6 +5,7 @@ import {
   apiFetchBucketsByTags,
   apiSearchBuckets,
 } from '@handlers/apiBucketServices';
+import { apiSearchContent } from '@handlers/apiContentServices';
 import { apiFetchObjectById, apiFetchObjectsByTags, apiSearchObjects } from '@handlers/apiObjectServices';
 
 const resolvers = {
@@ -59,6 +60,20 @@ const resolvers = {
       { keyword, searchMode = DEFAULT_SEARCH_MODE, limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET },
     ) => {
       const result = await apiSearchObjects(keyword, searchMode, limit, offset);
+      return {
+        data: result.data,
+        pagination: {
+          offset,
+          limit,
+          totalCount: result.totalCount,
+        },
+      };
+    },
+    searchContent: async (
+      _,
+      { keyword, searchMode = DEFAULT_SEARCH_MODE, limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET },
+    ) => {
+      const result = await apiSearchContent(keyword, searchMode, limit, offset);
       return {
         data: result.data,
         pagination: {
