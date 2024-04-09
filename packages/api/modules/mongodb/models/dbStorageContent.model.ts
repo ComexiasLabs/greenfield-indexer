@@ -6,7 +6,7 @@ export interface DBStorageContent {
   bucketName: string;
   objectName: string;
   contentType: string;
-  content: string;
-  contentUrl: string;
+  content?: string;
+  contentUrl?: string;
   indexDate: number;
 }

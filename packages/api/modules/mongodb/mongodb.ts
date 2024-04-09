@@ -6,10 +6,13 @@ import { DBSyncStatus } from './models/dbSyncStatus.model';
 import { MongoDBSyncStatus } from './collections/syncStatus.collections';
 import { MongoDBStorageBuckets } from './collections/storageBuckets.collections';
 import { MongoDBStorageObjects } from './collections/storageObjects.collections';
+import { MongoDBStorageContent } from './collections/storageContents.collections';
+import { DBStorageContent } from './models/dbStorageContent.model';
 
 enum CollectionNames {
   StorageBuckets = 'buckets',
   StorageObjects = 'objects',
+  StorageContent = 'content',
   SyncStatus = 'sync_status',
 }
 
@@ -19,6 +22,7 @@ export class MongoDB {
   public collections: {
     storageBuckets?: MongoDBStorageBuckets;
     storageObjects?: MongoDBStorageObjects;
+    storageContent?: MongoDBStorageContent;
     syncStatus?: MongoDBSyncStatus;
   } = {};
 
@@ -38,6 +42,9 @@ export class MongoDB {
     );
     this.collections.storageObjects = new MongoDBStorageObjects(
       db.collection<DBStorageObject>(CollectionNames.StorageObjects),
+    );
+    this.collections.storageContent = new MongoDBStorageContent(
+      db.collection<DBStorageContent>(CollectionNames.StorageContent),
     );
     this.collections.syncStatus = new MongoDBSyncStatus(db.collection<DBSyncStatus>(CollectionNames.SyncStatus));
 

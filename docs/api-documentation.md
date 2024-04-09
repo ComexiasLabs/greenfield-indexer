@@ -215,7 +215,7 @@ curl --location 'https://www.greenfieldindexer.com/api/graphql' \
 
 ### Search Objects
 
-#### searchBuckets
+#### searchObjects
 
 Search objects by keyword, with optional pagination.
 
@@ -249,9 +249,47 @@ Example:
 ```bash
 curl --location 'https://www.greenfieldindexer.com/api/graphql' \
 --header 'Content-Type: application/json' \
---data '{"query":"query {\n  searchBuckets(keyword: \"greendrive\", searchMode: \"Word\", limit: 10, offset: 0) {\n    data {\n      id\n      name\n      tags {\n        key\n        value\n      }\n    }\n    pagination {\n      offset\n      limit\n      totalCount\n    }\n  }\n}\n","variables":{}}'
+--data '{"query":"query {\n  searchObjects(keyword: \"greendrive\", searchMode: \"Word\", limit: 10, offset: 0) {\n    data {\n      id\n      name\n      tags {\n        key\n        value\n      }\n    }\n    pagination {\n      offset\n      limit\n      totalCount\n    }\n  }\n}\n","variables":{}}'
 ```
 
+### Search Content
+
+#### searchContent
+
+Search file content of objects by keyword, with optional pagination.
+Note: Currently supports only text files.
+
+Parameters:
+- Use searchMode = "word" to search the keyword by full word.
+- Use searchMode = "partial" to search the keyword by partial text.
+
+```graphql
+query searchContent($keyword: String!, searchMode: String, $limit: Int, $offset: Int) {
+  searchContent(keyword: $keyword, searchMode: $searchMode, limit: $limit, offset: $offset) {
+    data {
+      id
+      name
+      bucketName
+      objectName
+      contentType
+      contentUrl
+    }
+    pagination {
+      offset
+      limit
+      totalCount
+    }
+  }
+}
+```
+
+Example:
+
+```bash
+curl --location 'https://www.greenfieldindexer.com/api/graphql' \
+--header 'Content-Type: application/json' \
+--data '{"query":"query {\n  searchContent(keyword: \"file\", searchMode: \"Partial\", limit: 10, offset: 0) {\n    data {\n      id\n      name\n      bucketName\n      objectName\n      contentType\n      contentUrl\n    }\n    pagination {\n      offset\n      limit\n      totalCount\n    }\n  }\n}\n","variables":{}}'
+```
 
 ### Types
 
@@ -458,4 +496,25 @@ Example Request:
 
 ```bash
 curl "http://www.greenfieldindexer.com/api/search/objects?keyword=green&searchMode=word&offset=0&limit=10
+```
+
+### Search Content
+
+Search file content of objects by keyword, with optional pagination.
+Note: Currently supports only text files.
+
+- Method: GET
+- URL: <http://www.greenfieldindexer.com/api/search/content>
+- Query params:
+  - keyword: Keyword to search.
+  - searchMode:
+    - "word" to search the keyword by full word.
+    - "partial" to search the keyword by partial text.
+  - limit (optional): The maximum number of results to return.
+  - offset (optional): The number of items to skip before starting to collect the result set.
+
+Example Request:
+
+```bash
+curl "http://www.greenfieldindexer.com/api/search/content?keyword=green&searchMode=word&offset=0&limit=10
 ```

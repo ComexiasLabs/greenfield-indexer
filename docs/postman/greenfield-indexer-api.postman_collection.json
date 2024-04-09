@@ -182,6 +182,31 @@
 			"response": []
 		},
 		{
+			"name": "GraphQL (Search Content)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\n  searchContent(keyword: \"file\", searchMode: \"Partial\", limit: 10, offset: 0) {\n    data {\n      id\n      name\n      bucketName\n      objectName\n      contentType\n      contentUrl\n    }\n    pagination {\n      offset\n      limit\n      totalCount\n    }\n  }\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{GREENFIELD_INDEXER_API}}/api/graphql",
+					"host": [
+						"{{GREENFIELD_INDEXER_API}}"
+					],
+					"path": [
+						"api",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Find Buckets",
 			"request": {
 				"method": "GET",
@@ -543,6 +568,91 @@
 							"key": "limit",
 							"value": "10"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Content",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Gnfd-User-Address",
+						"value": "0x3DA7E2F900985b8880A9ACB3ca916F6031E6FF22",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{GREENFIELD_INDEXER_API}}/api/search/content?keyword=file&searchMode=partial&offset=0&limit=10",
+					"host": [
+						"{{GREENFIELD_INDEXER_API}}"
+					],
+					"path": [
+						"api",
+						"search",
+						"content"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "file"
+						},
+						{
+							"key": "searchMode",
+							"value": "partial"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{GREENFIELD_INDEXER_API}}/api/status",
+					"host": [
+						"{{GREENFIELD_INDEXER_API}}"
+					],
+					"path": [
+						"api",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Info",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Gnfd-User-Address",
+						"value": "0x3DA7E2F900985b8880A9ACB3ca916F6031E6FF22",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{GREENFIELD_INDEXER_API}}/api/info",
+					"host": [
+						"{{GREENFIELD_INDEXER_API}}"
+					],
+					"path": [
+						"api",
+						"info"
 					]
 				}
 			},

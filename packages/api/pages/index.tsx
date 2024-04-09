@@ -31,7 +31,7 @@ const HomePage = () => {
         ></link>
       </Head>
       <main className={styles.main}>
-          <img src="/assets/gi-logo-dark.svg" alt="Greenfield Indexer" style={{ height: 48 }} />
+        <img src="/assets/gi-logo-dark.svg" alt="Greenfield Indexer" style={{ height: 48 }} />
         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Grid container spacing={2} sx={{ marginTop: 2 }} maxWidth={900} justifyContent="center">
             <Box sx={{ padding: 2 }} className={styles.intro}>
@@ -39,8 +39,8 @@ const HomePage = () => {
                 Search service for BNB Greenfield
               </Typography>
               <Typography paragraph>
-                Greenfield Indexer is an open-source service that indexes buckets and objects on BNB Greenfield and 
-                make them <strong>available for search</strong> through an interactive API.
+                Greenfield Indexer is an open-source service that indexes buckets and objects on BNB Greenfield and make
+                them <strong>available for search</strong> through an interactive API.
               </Typography>
             </Box>
 
@@ -73,7 +73,7 @@ const HomePage = () => {
                 </TabPanel>
               </TabContext>
             </Box>
-            
+
             <Box sx={{ paddingTop: 8, display: 'flex', flexDirection: 'row', gap: 4, justifyContent: 'center' }}>
               <Button
                 variant="text"
