@@ -26,7 +26,14 @@ export const syncContents = async (env: Environments) => {
     }
 
     if (content.status === 'Successful') {
-      await indexStorageContent(env, object.itemId, content.content!);
+      await indexStorageContent(
+        env,
+        object.itemId,
+        object.bucketName,
+        object.objectName,
+        object.contentType,
+        content.content!,
+      );
 
       await updateStorageObjectStatus(env, object.itemId, ObjectIndexStatuses.SyncComplete);
     }
@@ -44,7 +51,7 @@ const getObjectsByStatus = async (
   const database = new MongoDB();
   try {
     await database.connectToDatabase(env);
-    const objects = await database.collections.storageObjects?.getStorageObjectsByStatus(indexStatus, 0, 100);
+    const objects = await database.collections.storageObjects?.getStorageObjectsByStatus(indexStatus, 0, 50);
 
     return objects;
   } catch (e) {

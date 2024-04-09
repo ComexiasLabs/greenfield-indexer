@@ -6,7 +6,7 @@ import { fetchBuckets, fetchObjectsInBucket } from './storageBucketService';
 import { DBStorageBucket } from '@/modules/mongodb/models/dbStorageBucket.model';
 import { Environments } from '@/core/types/environments';
 import { getSyncStatus, updateSyncStatus } from './statusService';
-import { BucketIndexStatuses } from '@/core/enum/indexStatuses';
+import { BucketIndexStatuses, ObjectIndexStatuses } from '@/core/enum/indexStatuses';
 import { InjestionChannels } from '@/core/enum/injestionChannels';
 
 export const bulkSyncBuckets = async (env: Environments) => {
@@ -58,7 +58,7 @@ export const bulkSyncObjects = async (env: Environments) => {
     }
 
     // Index objects in bucket
-    await indexStorageObjectBulk(env, objects.object_infos);
+    await indexStorageObjectBulk(env, objects.object_infos, ObjectIndexStatuses.PendingContentSync);
   });
 
   // Update sync status

@@ -14,7 +14,6 @@ export class MongoDBStorageObjects {
     await this.collection?.createIndex({ bucketName: 1 });
     await this.collection?.createIndex({ objectName: 1 });
     await this.collection?.createIndex({ objectName: 'text' });
-    await this.collection?.createIndex({ content: 'text' });
     await this.collection?.createIndex({ 'tags.key': 1, 'tags.value': 1 });
   }
 
@@ -79,7 +78,7 @@ export class MongoDBStorageObjects {
     await this.collection?.updateOne(query, update);
   }
 
-  async deleteStorageBucketByName(bucketName: string, objectName: string) {
+  async deleteStorageObjectByName(bucketName: string, objectName: string) {
     const query = { bucketName: bucketName, objectName: objectName };
     // @ts-ignore
     await this.collection?.deleteOne(query);

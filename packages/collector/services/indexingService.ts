@@ -5,6 +5,7 @@ import { StorageBucketApiData } from '@/core/types/storageBucketApiData';
 import { StorageObjectApiData } from '@/core/types/storageObjectApiData';
 import { Tag } from '@/core/types/tag';
 import { DBStorageBucket } from '@/modules/mongodb/models/dbStorageBucket.model';
+import { DBStorageContent } from '@/modules/mongodb/models/dbStorageContent.model';
 import { DBStorageObject } from '@/modules/mongodb/models/dbStorageObject.model';
 import { MongoDB } from '@/modules/mongodb/mongodb';
 
@@ -58,14 +59,30 @@ export const indexStorageObjectBulk = async (
   }
 };
 
-export const indexStorageContent = async (env: Environments, itemId: number, content: string) => {
+export const indexStorageContent = async (
+  env: Environments,
+  itemId: number,
+  bucketName: string,
+  objectName: string,
+  contentType: string,
+  content: string,
+) => {
   logger.logInfo('indexStorageContent', 'Begin');
 
   const database = new MongoDB();
   try {
     await database.connectToDatabase(env);
 
-    await database.collections.storageObjects?.updateStorageObjectContent(itemId, content);
+    const data: DBStorageContent = {
+      itemId,
+      bucketName,
+      objectName,
+      contentType,
+      content,
+      indexDate: Date.now(),
+    };
+
+    await database.collections.storageContent?.upsertStorageContent(data);
   } catch (e) {
     logger.logError('indexStorageContent', 'Error', e);
     throw e;
@@ -220,7 +237,8 @@ export const deleleStorageObject = async (env: Environments, bucketName: string,
   try {
     await database.connectToDatabase(env);
 
-    await database.collections.storageObjects?.deleteStorageBucketByName(bucketName, objectName);
+    await database.collections.storageObjects?.deleteStorageObjectByName(bucketName, objectName);
+    await database.collections.storageContent?.deleteStorageContent(bucketName, objectName);
   } catch (e) {
     logger.logError('deleleStorageObject', 'Error', e);
     throw e;

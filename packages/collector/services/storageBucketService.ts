@@ -141,8 +141,6 @@ export const fetchObjectContent = async (
   env: Environments,
   object: DBStorageObject,
 ): Promise<FetchObjectContentResponse> => {
-  logger.logInfo('fetchObjectContent', `Begin. bucket: ${object.bucketName} object: ${object.objectName} `);
-
   if (!object) {
     return {
       status: 'Skipped',
@@ -167,6 +165,8 @@ export const fetchObjectContent = async (
   const storageProvider =
     env === 'Mainnet' ? Config.greenfieldStorageProviderMainnet : Config.greenfieldStorageProviderTestnet;
   const contentUrl = `https://${object.bucketName}.${storageProvider}/${object.objectName}`;
+
+  logger.logInfo('fetchObjectContent', `Fetching object: ${contentUrl}`);
 
   try {
     const response = await axios.get(contentUrl, {
