@@ -1,32 +1,26 @@
 {
   "crons": [
     {
-      "httpMethod": "POST",
       "path": "/api/collect/tx?env=testnet",
       "schedule": "* * * * *"
     },
     {
-      "httpMethod": "POST",
       "path": "/api/collect/tx?env=mainnet",
       "schedule": "* * * * *"
     },
     {
-      "httpMethod": "POST",
       "path": "/api/collect/meta?env=testnet",
       "schedule": "* * * * *"
     },
     {
-      "httpMethod": "POST",
       "path": "/api/collect/meta?env=mainnet",
       "schedule": "* * * * *"
     },
     {
-      "httpMethod": "POST",
       "path": "/api/collect/content?env=testnet",
       "schedule": "* * * * *"
     },
     {
-      "httpMethod": "POST",
       "path": "/api/collect/content?env=mainnet",
       "schedule": "* * * * *"
     }

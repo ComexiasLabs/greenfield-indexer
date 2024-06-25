@@ -4,7 +4,7 @@ import { startInjest } from '@/services/injestionService';
 
 export const dynamic = 'force-dynamic'; // static by default, unless reading the request
 
-export async function POST(request: Request) {
+export async function GET(request: Request) {
   if (process.env.CRON_SECRET) {
     const authHeader = request.headers.get('authorization');
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
