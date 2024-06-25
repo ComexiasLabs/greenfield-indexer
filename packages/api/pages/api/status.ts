@@ -5,6 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 interface FetchSyncStatusResponse {
   status: string;
   lastIndexBlockHeight: number;
+  lastRefresh: string;
 }
 
 export type RequestData = ApiFindRequest;
@@ -34,6 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const data: ResponseData = {
       status: 'Online',
       lastIndexBlockHeight: result.lastIndexBlockHeight,
+      lastRefresh: result.timestampDisplay,
     };
 
     return res.status(200).json(data);
