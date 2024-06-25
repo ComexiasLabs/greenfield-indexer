@@ -34,7 +34,7 @@ export const syncContents = async (env: Environments) => {
         object.objectName,
         object.contentType,
         content.content!,
-        getContentUrl(env, object.bucketName, object.objectName)
+        getContentUrl(env, object.bucketName, object.objectName),
       );
 
       await updateStorageObjectStatus(env, object.itemId, ObjectIndexStatuses.SyncComplete);
