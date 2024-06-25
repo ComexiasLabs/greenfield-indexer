@@ -2,7 +2,9 @@ import { InjestionChannels } from '@core/enum/injestionChannels';
 import logger from '@core/logger/logger';
 import { MongoDB } from '@modules/mongodb/mongodb';
 
-export const apiFetchSyncStatus = async (): Promise<{ lastIndexBlockHeight: number } | undefined | null> => {
+export const apiFetchSyncStatus = async (): Promise<
+  { lastIndexBlockHeight: number; timestampDisplay: string } | undefined | null
+> => {
   const database = new MongoDB();
   try {
     logger.logInfo('apiFetchSyncStatus', 'Begin');
@@ -16,6 +18,7 @@ export const apiFetchSyncStatus = async (): Promise<{ lastIndexBlockHeight: numb
 
     return {
       lastIndexBlockHeight: data.blockHeight,
+      timestampDisplay: data.timestampDisplay,
     };
   } catch (e) {
     logger.logError('apiFetchSyncStatus', 'Failed', e);
