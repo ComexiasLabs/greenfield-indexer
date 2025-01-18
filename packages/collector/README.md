@@ -1,5 +1,9 @@
 # Greenfield Indexer - Collector Service
 
+## References
+
+Reference API Doc: https://greenfield.bnbchain.org/openapi
+
 ## Getting Started
 
 ### Setup Collector
@@ -32,15 +36,95 @@ yarn build && yarn start
 
 4. **Collect and Index data**
 
-The following endpoint will index the first 100 buckets. Subsequent invokations will index the next 100 buckets, and so on.
+```
+chmod +x scripts/bulk-index-buckets.sh
+chmod +x scripts/bulk-index-objects.sh
+chmod +x scripts/bulk-index-content.sh
+
+./scripts/bulk-index-buckets.sh mainnet
+./scripts/bulk-index-buckets.sh testnet
+
+./scripts/bulk-index-objects.sh mainnet
+./scripts/bulk-index-objects.sh testnet
+
+./scripts/bulk-index-content.sh mainnet
+./scripts/bulk-index-content.sh testnet
+```
+
+## Collector System
+
+### Database Tables
+
+- buckets
+- objects
+- content
+- sync_status
+
+### Indexing Stages
 
 ```
-curl --location --request POST 'https://www.greenfieldindexer.com/api/collect' --data ''
+export enum BucketIndexStatuses {
+  PendingBucketSync = 'PendingBucketSync',
+  PendingObjectsSync = 'PendingObjectsSync',
+  SyncComplete = 'SyncComplete',
+  BucketFetchFailed = 'BucketFetchFailed',
+  ObjectsFetchFailed = 'ObjectsFetchFailed',
+}
+
+export enum ObjectIndexStatuses {
+  PendingContentSync = 'PendingContentSync',
+  SyncComplete = 'SyncComplete',
+  ContentFetchFailed = 'ContentFailedFetch',
+}
 ```
 
-## API Documentation
+### Scheduler
 
-The Greenfield Indexer provides a set of API endpoints to trigger the ingestion and indexing of buckets and objects within the BNB Chain's Greenfield. These operations are essential for keeping the off-chain database up-to-date with the latest data from Greenfield.
+The scheduler for the collection on server is configured to the following:
+
+Mainnet:
+```
+{
+  "crons": [
+    {
+      "path": "/api/collect/tx?env=mainnet",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/collect/meta?env=mainnet",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/collect/content?env=mainnet",
+      "schedule": "* * * * *"
+    }
+  ]
+}
+```
+
+Testnet:
+```
+{
+  "crons": [
+    {
+      "path": "/api/collect/tx?env=testnet",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/collect/meta?env=testnet",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/collect/content?env=testnet",
+      "schedule": "* * * * *"
+    }
+  ]
+}
+```
+
+## Collector API Documentation
+
+The Greenfield Indexer provides a set of collector API endpoints to trigger the ingestion and indexing of buckets and objects within the BNB Chain's Greenfield. These operations are intended to keep the off-chain database up-to-date with the latest data from Greenfield.
 
 ### Authentication
 
@@ -56,43 +140,49 @@ Header: x-api-key: YourApiKeyHere
 
 Trigger the ingestion and indexing process for both buckets and objects, starting from the last synchronization point.
 
-- Method: POST
+Sequence of actions:
+- Fetch transactions from last indexed block
+- 
+
+This will first crawl Transactions, then followed by the bucket and objects based on the transaction, finally the content for each bucket.
+
+- Method: GET
 - URL: https://www.greenfieldindexer.com/api/collect
 - Headers: x-api-key: Your API key
 
 Example Request:
 
 ```
-curl -X POST https://www.greenfieldindexer.com/api/collect \
+curl -X GET https://www.greenfieldindexer.com/api/collect \
 -H "x-api-key: YourApiKeyHere"
 ```
 
-#### Collect Buckets
+#### Collect Buckets (Bulk Collection)
 
-Initiate the ingestion and indexing of buckets only, resuming from the last synchronization point.
+Initiate the ingestion and indexing of buckets only, resuming from the last synchronization point based on last indexed paginationKey.
 
-- Method: POST
+- Method: GET
 - URL: https://www.greenfieldindexer.com/api/collect/buckets
 - Headers: x-api-key: Your API key
 
 -Example Request:
 
 ```
-curl -X POST https://www.greenfieldindexer.com/api/collect/buckets \
+curl -X GET https://www.greenfieldindexer.com/api/collect/buckets \
 -H "x-api-key: YourApiKeyHere"
 ```
 
-#### Collect Objects
+#### Collect Objects (Bulk Collection)
 
 Start the ingestion and indexing process for objects, picking up from the last synchronization point.
 
-- Method: POST
+- Method: GET
 - URL: https://www.greenfieldindexer.com/api/collect/objects
 - Headers: x-api-key: Your API key
 
 Example Request:
 
 ```
-curl -X POST https://www.greenfieldindexer.com/api/collect/objects \
+curl -X GET https://www.greenfieldindexer.com/api/collect/objects \
 -H "x-api-key: YourApiKeyHere"
 ```
